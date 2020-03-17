@@ -3,7 +3,7 @@ import React from "react";
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
   return (
     <div>
-      <h2>Cart Chicken - {cart.id && cart.id.slice(0, 4)}</h2>
+      <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
       <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
         onClick={createOrder}
