@@ -5,6 +5,7 @@ import Login from "./Login";
 import Orders from "./Orders";
 import Cart from "./Cart";
 import Products from "./Products";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const headers = () => {
   const token = window.localStorage.getItem("token");
@@ -124,21 +125,48 @@ const App = () => {
     return <Login login={login} />;
   } else {
     return (
-      <div>
-        <h1>Foo, Bar, Bazz.. etc Store</h1>
-        <button onClick={logout}>Logout {auth.username} </button>
-        <div className="horizontal">
-          <Products addToCart={addToCart} products={products} />
-          <Cart
-            lineItems={lineItems}
-            removeFromCart={removeFromCart}
-            cart={cart}
-            createOrder={createOrder}
-            products={products}
-          />
-          <Orders lineItems={lineItems} products={products} orders={orders} />
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/Cart">Cart</Link>
+              </li>
+              <li>
+                <Link to="/Orders">Orders</Link>
+              </li>
+            </ul>
+            <button onClick={logout}>Logout {auth.username} </button>
+          </nav>
+
+          {/* A <Switch> looks through its children <Route>s and
+      renders the first one that matches the current URL. */}
+          <Switch>
+            <Route path="/Cart">
+              <Cart
+                lineItems={lineItems}
+                removeFromCart={removeFromCart}
+                cart={cart}
+                createOrder={createOrder}
+                products={products}
+              />{" "}
+            </Route>
+            <Route path="/Orders">
+              <Orders
+                lineItems={lineItems}
+                products={products}
+                orders={orders}
+              />
+            </Route>
+            <Route path="/">
+              <Products addToCart={addToCart} products={products} />{" "}
+            </Route>
+          </Switch>
         </div>
-      </div>
+      </Router>
     );
   }
 };
