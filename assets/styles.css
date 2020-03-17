@@ -60,7 +60,6 @@ li > * {
   display: flex;
   flex-wrap: nowrap;
   background-color: DodgerBlue;
-
 }
 
 .header > div {
@@ -93,4 +92,8 @@ li > * {
 .header a.active {
   background-color: dodgerblue;
   color: white;
+}
+
+.hide {
+  display: none;
 }
