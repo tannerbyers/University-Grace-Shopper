@@ -19,7 +19,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
             );
             return (
               <li key={lineItem.id}>
-                {product && product.name}{" "}
+                {product && product.name}
                 <span className="quantity">Quantity: {lineItem.quantity}</span>
                 <button onClick={() => removeFromCart(lineItem.id)}>
                   Remove From Cart
