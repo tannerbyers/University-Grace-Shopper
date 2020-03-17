@@ -128,20 +128,18 @@ const App = () => {
     return (
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/Cart">Cart</Link>
-              </li>
-              <li>
-                <Link to="/Orders">Orders</Link>
-              </li>
-            </ul>
-            <button onClick={logout}>Logout {auth.username} </button>
+          <nav className="header">
+            <div>
+              <Link to="/">Home</Link>
+            </div>
+            <div>
+              <Link to="/Cart">Cart</Link>
+            </div>
+            <div>
+              <Link to="/Orders">Orders</Link>
+            </div>
           </nav>
+          <button onClick={logout}>Logout {auth.username} </button>
 
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
