@@ -99,6 +99,7 @@ const App = () => {
   };
 
   const addToCart = productId => {
+    event.preventDefault();
     axios.post("/api/addToCart", { productId }, headers()).then(response => {
       const lineItem = response.data;
       const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);

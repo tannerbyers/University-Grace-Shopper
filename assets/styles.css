@@ -52,6 +52,44 @@ li > * {
   font-weight: bold;
 }
 
+/* feature/product_listing */
+/* Product Page Stylings */
+
+.product-filter {
+  display: flex;
+}
+@media (max-width: 480px) {
+  .product-filter {
+    flex-direction: column;
+  }
+}
+
+.product-filter h1 {
+  flex-grow: 1;
+}
+
+.sort {
+  display: flex;
+}
+.collection-sort {
+  display: flex;
+  flex-direction: column;
+}
+
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 0;
+}
+
+.parent > div {
+  flex-grow: 1;
+  text-align: center;
+  background: #fff;
+  border-radius: 2px;
+  border: 1px solid grey;
+  padding: 1em;
+
 /* Style the header with a grey background and some padding */
 .header {
   overflow: hidden;
@@ -93,4 +131,5 @@ li > * {
 .header a.active {
   background-color: dodgerblue;
   color: white;
+
 }
