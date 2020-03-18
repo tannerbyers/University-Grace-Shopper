@@ -98,7 +98,6 @@ li > * {
   display: flex;
   flex-wrap: nowrap;
   background-color: DodgerBlue;
-
 }
 
 .header > div {
@@ -132,4 +131,8 @@ li > * {
   background-color: dodgerblue;
   color: white;
 
+}
+
+.hide {
+  display: none;
 }
