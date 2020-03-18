@@ -1,9 +1,9 @@
-import React from 'React';
+import React from "react";
 
 const Profile = ({ auth, changePassword }) => {
   const toggleChangePassword = () => {
     const formToToggle = document.querySelector('[name="toggle-me"]');
-    formToToggle.classList.toggle('hide');
+    formToToggle.classList.toggle("hide");
   };
   return (
     <div>

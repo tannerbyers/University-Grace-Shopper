@@ -1,5 +1,6 @@
 import React from "react";
 import faker from "faker";
+import Rating from "./Rating";
 
 const Products = ({ products, addToCart }) => {
   return (
@@ -52,17 +53,21 @@ const Products = ({ products, addToCart }) => {
           </p>
         </div>
         {products.map(product => {
+          console.log(product);
           return (
             <div key={product.id} className="item">
               <h1>{product.name}</h1>
               <img src="http://placeimg.com/140/80/animals"></img>
-              <h4>{product.price}</h4>
+              <h4>${product.price}</h4>
               <h1>
                 <b>&#10576;</b>
               </h1>
               <p>
                 This product is {faker.commerce.productAdjective()}. It is{" "}
                 {faker.commerce.productMaterial()}.
+              </p>
+              <p>
+                <Rating products={products} />
               </p>
               <button onClick={() => addToCart(product.id)}>Add to Cart</button>
             </div>
@@ -72,6 +77,7 @@ const Products = ({ products, addToCart }) => {
     </div>
   );
 };
+//&#9734;
 
 export default Products;
 

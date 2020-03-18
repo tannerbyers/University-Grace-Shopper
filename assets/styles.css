@@ -57,6 +57,7 @@ li > * {
 
 .product-filter {
   display: flex;
+  background-color: dodgerblue;
 }
 @media (max-width: 480px) {
   .product-filter {
@@ -89,6 +90,11 @@ li > * {
   border-radius: 2px;
   border: 1px solid grey;
   padding: 1em;
+}
+
+.checked {
+  color: orange;
+}
 
 /* Style the header with a grey background and some padding */
 .header {
@@ -130,7 +136,6 @@ li > * {
 .header a.active {
   background-color: dodgerblue;
   color: white;
-
 }
 
 .hide {
