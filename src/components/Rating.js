@@ -8,7 +8,7 @@ const Rating = ({ products }) => {
   return (
     <div className="rating-form">
       <StarRatingComponent
-        name={Math.random() * 1}
+        name={Math.random()}
         starCount={5}
         value={rating}
         onStarClick={setRating}

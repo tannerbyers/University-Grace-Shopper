@@ -1,6 +1,6 @@
 import React from "react";
 import faker from "faker";
-import Rating from "./Rating";
+import Rating from "./components/Rating";
 
 const Products = ({ products, addToCart }) => {
   return (
@@ -25,33 +25,6 @@ const Products = ({ products, addToCart }) => {
         </div>
       </nav>
       <div className="parent">
-        <div className="item">
-          <h1>{faker.commerce.product()}</h1>
-          <img src="http://placeimg.com/140/80/animals"></img>
-          <h4>{faker.commerce.price()}</h4>
-          <p>
-            This product is {faker.commerce.productAdjective()}. It is{" "}
-            {faker.commerce.productMaterial()}.
-          </p>
-        </div>
-        <div className="item">
-          <h1>{faker.commerce.product()}</h1>
-          <img src="http://placeimg.com/140/80/animals"></img>
-          <h4>{faker.commerce.price()}</h4>
-          <p>
-            This product is {faker.commerce.productAdjective()}. It is{" "}
-            {faker.commerce.productMaterial()}.
-          </p>
-        </div>
-        <div className="item">
-          <h1>{faker.commerce.product()}</h1>
-          <img src="http://placeimg.com/140/80/animals"></img>
-          <h4>{faker.commerce.price()}</h4>
-          <p>
-            This product is {faker.commerce.productAdjective()}. It is{" "}
-            {faker.commerce.productMaterial()}.
-          </p>
-        </div>
         {products.map(product => {
           console.log(product);
           return (
