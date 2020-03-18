@@ -49,8 +49,9 @@ app.get('/', (req, res, next) =>
 app.post('/api/auth', (req, res, next) => {
   db.authenticate(req.body)
     .then(token => res.send({ token }))
-    .catch(() => {
-      const error = Error('not authorized');
+    .catch((serverError) => {
+
+      const error = Error(serverError);
       error.status = 401;
       next(error);
     });
