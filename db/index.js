@@ -1,8 +1,8 @@
-const client = require('./client');
+const client = require("./client");
 
-const { authenticate, compare, findUserFromToken, hash } = require('./auth');
+const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems } = require('./models'));
+const models = ({ products, users, orders, lineItems } = require("./models"));
 
 const {
   getCart,
@@ -11,7 +11,7 @@ const {
   removeFromCart,
   createOrder,
   getLineItems
-} = require('./userMethods');
+} = require("./userMethods");
 
 const sync = async () => {
   const SQL = `
@@ -51,37 +51,37 @@ const sync = async () => {
 
   const _users = {
     lucy: {
-      username: 'lucy',
-      password: 'LUCY',
-      role: 'ADMIN'
+      username: "lucy",
+      password: "LUCY",
+      role: "ADMIN"
     },
     moe: {
-      username: 'moe',
-      password: 'MOE',
+      username: "moe",
+      password: "MOE",
       role: null
     },
     curly: {
-      username: 'larry',
-      password: 'LARRY',
+      username: "larry",
+      password: "LARRY",
       role: null
     }
   };
 
   const _products = {
     foo: {
-      name: 'foo',
+      name: "foo",
       price: 2
     },
     bar: {
-      name: 'bar',
+      name: "bar",
       price: 2
     },
     bazz: {
-      name: 'bazz',
+      name: "bazz",
       price: 2.5
     },
     quq: {
-      name: 'quq',
+      name: "quq",
       price: 11.99
     }
   };
@@ -91,8 +91,6 @@ const sync = async () => {
   const [foo, bar, bazz] = await Promise.all(
     Object.values(_products).map(product => products.create(product))
   );
-
-  // users.update({ password: 'LUCY!', id: lucy.id });
 
   const _orders = {
     moe: {
@@ -107,7 +105,7 @@ const sync = async () => {
     acc[user.username] = user;
     return acc;
   }, {});
-  console.log(userMap);
+
   const productMap = (await products.read()).reduce((acc, product) => {
     acc[product.name] = product;
     return acc;

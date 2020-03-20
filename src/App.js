@@ -134,16 +134,28 @@ const App = () => {
           id: auth.id
         })
         .then(response => console.log(response.data))
-        .then(() => console.log("pasword updated!"));
+        .then(() => console.log("password updated!"));
     } else {
       alert("passwords don't match");
     }
   };
 
+  const createUser = async credentials => {
+    axios
+      .post("/api/createUser", credentials)
+      .then(response =>
+        console.log("response.data from front end", response.data)
+      );
+  };
+
+  // let callCreateUser = async () =>
+  //   await createUser({ username: "phil", password: "PHIL", role: "ADMIN" });
+  // callCreateUser();
+
   const { view } = params;
 
   if (!auth.id) {
-    return <Login login={login} />;
+    return <Login login={login} createUser={createUser} />;
   } else {
     return (
       <Router>
@@ -161,8 +173,6 @@ const App = () => {
           </nav>
           <button onClick={logout}>Logout {auth.username} </button>
           <Link to="/Profile">Profile</Link>
-          {/*<button onClick={() => changePassword(auth)}>Change Password</button>*/}
-
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
           <Switch>
