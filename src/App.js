@@ -121,23 +121,8 @@ const App = () => {
     });
   };
 
-  const changePassword = ev => {
-    ev.preventDefault();
-    const newPassword = document.querySelector('[name="new_pw"]').value;
-    const reEnteredPassword = document.querySelector('[name="re_entered_pw"]')
-      .value;
-
-    if (newPassword === reEnteredPassword) {
-      axios
-        .put(`/api/auth/${auth.id}`, {
-          password: newPassword,
-          id: auth.id
-        })
-        .then(response => console.log(response.data))
-        .then(() => console.log("password updated!"));
-    } else {
-      alert("passwords don't match");
-    }
+  const changePassword = async credentials => {
+    axios.put(`/api/auth/${auth.id}`, credentials);
   };
 
   const createUser = async credentials => {
@@ -147,10 +132,6 @@ const App = () => {
         console.log("response.data from front end", response.data)
       );
   };
-
-  // let callCreateUser = async () =>
-  //   await createUser({ username: "phil", password: "PHIL", role: "ADMIN" });
-  // callCreateUser();
 
   const { view } = params;
 
