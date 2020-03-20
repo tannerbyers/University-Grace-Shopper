@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-const OrdersWidget = () => {
+const OrdersWidget = ({orders}) => {
+
+    console.log(orders)
   return (
     <div style={{position: "relative"}}>
       <img
@@ -8,7 +10,7 @@ const OrdersWidget = () => {
         src="https://image.flaticon.com/icons/svg/1374/1374128.svg"
       />
       <div style={{position: "absolute", top: "-15px", right: "-10px", fontSize: "1rem"}}>
-          100
+          {orders.length || null}
       </div>
     </div>
   );
