@@ -3,6 +3,7 @@ import qs from "qs";
 import axios from "axios";
 import Login from "./Login";
 import Orders from "./Orders";
+import OrdersWidget from "./components/Orders/OrdersWidget"
 import Cart from "./Cart";
 import Profile from "./Profile";
 import Products from "./Products";
@@ -168,7 +169,7 @@ const App = () => {
               <Link to="/Cart">Cart</Link>
             </div>
             <div>
-              <Link to="/Orders">Orders</Link>
+              <Link to="/Orders"><OrdersWidget /></Link>
             </div>
           </nav>
           <button onClick={logout}>Logout {auth.username} </button>
