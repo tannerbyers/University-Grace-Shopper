@@ -1,4 +1,6 @@
 import React from "react";
+import "./components/SaveForLater/SaveForLater"
+import SaveForLater from "./components/SaveForLater/SaveForLater";
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
   console.log(lineItems)
@@ -29,6 +31,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
             );
           })}
       </ul>
+      <SaveForLater />
     </div>
   );
 };
