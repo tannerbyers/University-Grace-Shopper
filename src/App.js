@@ -100,11 +100,16 @@ const App = () => {
       });
   };
 
+  const updateProducts = () => {
+    axios.get("/api/products").then(response => setProducts(response.data));
+  };
+
   const addToCart = (productId, inventory) => {
     event.preventDefault();
     axios
       .post("/api/addToCart", { productId, inventory }, headers())
       .then(response => {
+        updateProducts();
         const lineItem = response.data;
         const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
         if (!found) {
@@ -149,12 +154,12 @@ const App = () => {
               <Link to="/">Home</Link>
             </div>
             <div>
-              <Link to="/Cart"><CartWidget lineItems={lineItems} /></Link>
+              <Link to="/Cart">
+                <CartWidget lineItems={lineItems} />
+              </Link>
             </div>
             <div>
-              <Link to="/Orders">
-              Orders
-              </Link>
+              <Link to="/Orders">Orders</Link>
             </div>
           </nav>
           <button onClick={logout}>Logout {auth.username} </button>
