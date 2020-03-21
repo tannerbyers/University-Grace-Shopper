@@ -102,6 +102,11 @@ app.get("/api/getLineItems", (req, res, next) => {
 });
 
 app.post("/api/addToCart", (req, res, next) => {
+  db.models.products.update({
+    inventory: req.body.inventory,
+    productId: req.body.id
+  });
+
   db.addToCart({ userId: req.user.id, productId: req.body.productId })
     .then(lineItem => res.send(lineItem))
     .catch(next);

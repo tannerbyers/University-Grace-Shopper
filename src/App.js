@@ -100,20 +100,22 @@ const App = () => {
       });
   };
 
-  const addToCart = productId => {
+  const addToCart = (productId, inventory) => {
     event.preventDefault();
-    axios.post("/api/addToCart", { productId }, headers()).then(response => {
-      const lineItem = response.data;
-      const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
-      if (!found) {
-        setLineItems([...lineItems, lineItem]);
-      } else {
-        const updated = lineItems.map(_lineItem =>
-          _lineItem.id === lineItem.id ? lineItem : _lineItem
-        );
-        setLineItems(updated);
-      }
-    });
+    axios
+      .post("/api/addToCart", { productId, inventory }, headers())
+      .then(response => {
+        const lineItem = response.data;
+        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
+        if (!found) {
+          setLineItems([...lineItems, lineItem]);
+        } else {
+          const updated = lineItems.map(_lineItem =>
+            _lineItem.id === lineItem.id ? lineItem : _lineItem
+          );
+          setLineItems(updated);
+        }
+      });
   };
 
   const removeFromCart = lineItemId => {
