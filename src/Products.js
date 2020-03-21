@@ -2,32 +2,21 @@ import React from "react";
 import faker from "faker";
 import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
+import ProductNav from "./components/Products/ProductNav";
 
 const Products = ({ products, addToCart }) => {
   return (
     <div>
-      <nav className="product-filter">
-        <h1>Products</h1>
-
-        <div className="sort">
-          <div className="collection-sort">
-            <label>Filter by:</label>
-            <select>
-              <option value="/">All Products</option>
-            </select>
-          </div>
-
-          <div className="collection-sort">
-            <label>Sort by:</label>
-            <select>
-              <option value="/">Featured</option>
-            </select>
-          </div>
-        </div>
-      </nav>
+      <ProductNav />
       <div className="parent">
         {products.map(product => {
-          return <ProductItem product={product} />;
+          return (
+            <ProductItem
+              key={product.id}
+              addToCart={addToCart}
+              product={product}
+            />
+          );
         })}
       </div>
     </div>

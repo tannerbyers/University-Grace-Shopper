@@ -1,8 +1,8 @@
-const client = require('./client');
+const client = require("./client");
 
-const { authenticate, compare, findUserFromToken, hash } = require('./auth');
+const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems } = require('./models'));
+const models = ({ products, users, orders, lineItems } = require("./models"));
 
 const {
   getCart,
@@ -11,7 +11,7 @@ const {
   removeFromCart,
   createOrder,
   getLineItems
-} = require('./userMethods');
+} = require("./userMethods");
 
 const sync = async () => {
   const SQL = `
@@ -32,6 +32,7 @@ const sync = async () => {
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       name VARCHAR(100) NOT NULL UNIQUE,
       price DECIMAL NOT NULL,
+      inventory INTEGER NOT NULL,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -51,38 +52,42 @@ const sync = async () => {
 
   const _users = {
     lucy: {
-      username: 'lucy',
-      password: 'LUCY',
-      role: 'ADMIN'
+      username: "lucy",
+      password: "LUCY",
+      role: "ADMIN"
     },
     moe: {
-      username: 'moe',
-      password: 'MOE',
+      username: "moe",
+      password: "MOE",
       role: null
     },
     curly: {
-      username: 'larry',
-      password: 'LARRY',
+      username: "larry",
+      password: "LARRY",
       role: null
     }
   };
 
   const _products = {
     foo: {
-      name: 'foo',
-      price: 2
+      name: "foo",
+      price: 2,
+      inventory: 10
     },
     bar: {
-      name: 'bar',
-      price: 2
+      name: "bar",
+      price: 2,
+      inventory: 5
     },
     bazz: {
-      name: 'bazz',
-      price: 2.5
+      name: "bazz",
+      price: 2.5,
+      inventory: 8
     },
     quq: {
-      name: 'quq',
-      price: 11.99
+      name: "quq",
+      price: 11.99,
+      inventory: 9
     }
   };
   const [lucy, moe] = await Promise.all(

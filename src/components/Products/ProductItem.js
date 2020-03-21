@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import faker from "faker";
 
-const ProductItem = ({ product }) => {
+const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
+  const [inventory, setInventory] = useState(0);
+
+  useEffect(() => {
+    setInventory(product.inventory);
+    console.log(product.inventory);
+  }, []);
 
   const handleClick = e => {
+    setInventory(inventory - 1);
     if (details == "") {
       setDetails("hide");
     } else {
@@ -13,11 +20,14 @@ const ProductItem = ({ product }) => {
     }
   };
 
+  console.log(inventory);
+
   return (
-    <div key={product.id} className="item">
+    <div className="item">
       <h1>{product.name}</h1>
       <img src="http://placeimg.com/140/80/animals"></img>
-      <h4>${product.price}</h4>
+      <h3>${product.price}</h3>
+      <h4>Stock : {inventory}</h4>
       <h1>
         <button className="details" onClick={handleClick}>
           &#10576;
@@ -27,7 +37,9 @@ const ProductItem = ({ product }) => {
         This product is {faker.commerce.productAdjective()}. It is{" "}
         {faker.commerce.productMaterial()}.
       </p>
-      <button onClick={() => addToCart(product.id)}>Add to Cart</button>
+      <button onClick={() => addToCart(product.id, product.inventory)}>
+        Add to Cart
+      </button>
     </div>
   );
 };
