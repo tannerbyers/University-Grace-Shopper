@@ -109,16 +109,17 @@ const App = () => {
     axios
       .post("/api/addToCart", { productId, inventory }, headers())
       .then(response => {
-        updateProducts();
         const lineItem = response.data;
         const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
         if (!found) {
+          updateProducts();
           setLineItems([...lineItems, lineItem]);
         } else {
           const updated = lineItems.map(_lineItem =>
             _lineItem.id === lineItem.id ? lineItem : _lineItem
           );
           setLineItems(updated);
+          updateProducts();
         }
       });
   };
