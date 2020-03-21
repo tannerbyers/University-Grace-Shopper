@@ -27,7 +27,7 @@ const Products = ({ products, addToCart }) => {
       </nav>
       <div className="parent">
         {products.map(product => {
-          return <ProductItem product={product} />;
+          return <ProductItem addToCart={addToCart} product={product} />;
         })}
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import faker from "faker";
 
-const ProductItem = ({ product }) => {
+const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
 
   const handleClick = e => {

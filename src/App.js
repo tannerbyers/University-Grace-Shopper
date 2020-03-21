@@ -3,7 +3,7 @@ import qs from "qs";
 import axios from "axios";
 import Login from "./Login";
 import Orders from "./Orders";
-import OrdersWidget from "./components/Orders/OrdersWidget";
+import CartWidget from "./components/Cart/CartWidget";
 import Cart from "./Cart";
 import Profile from "./Profile";
 import Products from "./Products";
@@ -147,11 +147,11 @@ const App = () => {
               <Link to="/">Home</Link>
             </div>
             <div>
-              <Link to="/Cart">Cart</Link>
+              <Link to="/Cart"><CartWidget /></Link>
             </div>
             <div>
               <Link to="/Orders">
-                <OrdersWidget orders={orders} />
+              Orders
               </Link>
             </div>
           </nav>
