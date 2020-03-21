@@ -3,6 +3,7 @@ import qs from "qs";
 import axios from "axios";
 import Login from "./Login";
 import Orders from "./Orders";
+import CartWidget from "./components/Cart/CartWidget";
 import Cart from "./Cart";
 import Profile from "./Profile";
 import Products from "./Products";
@@ -123,29 +124,22 @@ const App = () => {
     });
   };
 
-  const changePassword = ev => {
-    ev.preventDefault();
-    const newPassword = document.querySelector('[name="new_pw"]').value;
-    const reEnteredPassword = document.querySelector('[name="re_entered_pw"]')
-      .value;
+  const changePassword = async credentials => {
+    axios.put(`/api/auth/${auth.id}`, credentials);
+  };
 
-    if (newPassword === reEnteredPassword) {
-      axios
-        .put(`/api/auth/${auth.id}`, {
-          password: newPassword,
-          id: auth.id
-        })
-        .then(response => console.log(response.data))
-        .then(() => console.log("pasword updated!"));
-    } else {
-      alert("passwords don't match");
-    }
+  const createUser = async credentials => {
+    axios
+      .post("/api/createUser", credentials)
+      .then(response =>
+        console.log("response.data from front end", response.data)
+      );
   };
 
   const { view } = params;
 
   if (!auth.id) {
-    return <Login login={login} />;
+    return <Login login={login} createUser={createUser} />;
   } else {
     return (
       <Router>
@@ -155,16 +149,16 @@ const App = () => {
               <Link to="/">Home</Link>
             </div>
             <div>
-              <Link to="/Cart">Cart</Link>
+              <Link to="/Cart"><CartWidget lineItems={lineItems} /></Link>
             </div>
             <div>
-              <Link to="/Orders">Orders</Link>
+              <Link to="/Orders">
+              Orders
+              </Link>
             </div>
           </nav>
           <button onClick={logout}>Logout {auth.username} </button>
           <Link to="/Profile">Profile</Link>
-          {/*<button onClick={() => changePassword(auth)}>Change Password</button>*/}
-
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
           <Switch>

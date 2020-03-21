@@ -1,6 +1,7 @@
 import React from "react";
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
+  console.log(lineItems)
   return (
     <div>
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>

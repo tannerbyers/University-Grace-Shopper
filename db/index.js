@@ -97,8 +97,6 @@ const sync = async () => {
     Object.values(_products).map(product => products.create(product))
   );
 
-  // users.update({ password: 'LUCY!', id: lucy.id });
-
   const _orders = {
     moe: {
       userId: moe.id
@@ -112,7 +110,7 @@ const sync = async () => {
     acc[user.username] = user;
     return acc;
   }, {});
-  console.log(userMap);
+
   const productMap = (await products.read()).reduce((acc, product) => {
     acc[product.name] = product;
     return acc;

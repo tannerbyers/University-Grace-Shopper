@@ -60,12 +60,21 @@ app.get("/api/auth", isLoggedIn, (req, res, next) => {
   res.send(req.user);
 });
 
+// update password
 app.put("/api/auth/:id", (req, res, next) => {
   models.users
     .update(req.body)
     .then(updatedUser => res.send(updatedUser))
     .catch(next);
-  // call users.update({ password: 'LUCY!', id: lucy.id })
+});
+
+// create new user
+app.post("/api/createUser", (req, res, next) => {
+  models.users
+    .create(req.body)
+    .then(newUser => res.send(newUser))
+    .then(() => console.log("SERVER POST REQUEST INVOKED"))
+    .catch(next);
 });
 
 app.get("/api/getCart", (req, res, next) => {
@@ -97,6 +106,7 @@ app.post("/api/addToCart", (req, res, next) => {
     inventory: req.body.inventory,
     productId: req.body.id
   });
+
   db.addToCart({ userId: req.user.id, productId: req.body.productId })
     .then(lineItem => res.send(lineItem))
     .catch(next);

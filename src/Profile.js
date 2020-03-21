@@ -1,24 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Profile = ({ auth, changePassword }) => {
-  const toggleChangePassword = () => {
-    const formToToggle = document.querySelector('[name="toggle-me"]');
-    formToToggle.classList.toggle("hide");
+  const [newPassword, setNewPassword] = useState("");
+  const [reEnteredPassword, setReEnteredPassword] = useState("");
+  const [wantsToChangePW, setWantsToChangePW] = useState(true);
+
+  useEffect(() => {
+    setWantsToChangePW(false);
+  }, []);
+
+  const onSubmit = ev => {
+    ev.preventDefault();
+    if (newPassword === reEnteredPassword) {
+      changePassword({
+        username: auth.username,
+        password: newPassword,
+        id: auth.id
+      }).then(() => {
+        setNewPassword("");
+        setReEnteredPassword("");
+      });
+    }
   };
+
   return (
     <div>
       <h1>Hello, {auth.username}</h1>
-      <button type="button" onClick={toggleChangePassword}>
+      <button
+        type="button"
+        onClick={() => {
+          if (!wantsToChangePW) setWantsToChangePW(true);
+          else setWantsToChangePW(false);
+          console.log(wantsToChangePW);
+        }}
+      >
         Change Password
       </button>
-      <div name="toggle-me" className="hide">
-        <form onSubmit={changePassword}>
-          <label>new password</label>
-          <input name="new_pw" type="password"></input>
-          <label>re-enter password</label>
-          <input name="re_entered_pw" type="password"></input>
-          <button type="submit">Save changes</button>
-        </form>
+      <div>
+        {wantsToChangePW ? (
+          <div>
+            <form onSubmit={onSubmit}>
+              <label>new password</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={ev => setNewPassword(ev.target.value)}
+              />
+              <label>re-enter password</label>
+              <input
+                type="password"
+                value={reEnteredPassword}
+                onChange={ev => setReEnteredPassword(ev.target.value)}
+              />
+              <button type="submit">Save changes</button>
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
