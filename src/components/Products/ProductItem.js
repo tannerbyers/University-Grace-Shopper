@@ -13,7 +13,7 @@ const ProductItem = ({ product, addToCart }) => {
     }
   };
 
-  console.log(product.inventory);
+  console.log(product);
 
   return (
     <div className="item">
