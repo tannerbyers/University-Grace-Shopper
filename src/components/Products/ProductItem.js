@@ -13,7 +13,17 @@ const ProductItem = ({ product, addToCart }) => {
     }
   };
 
-  console.log(product);
+  const RenderButton = () => {
+    if (product.inventory && product.inventory > 0) {
+      return (
+        <button onClick={() => addToCart(product.id, product.inventory - 1)}>
+          Add to Cart
+        </button>
+      );
+    } else {
+      return <button disabled={true}>Add to Cart</button>;
+    }
+  };
 
   return (
     <div className="item">
@@ -30,9 +40,7 @@ const ProductItem = ({ product, addToCart }) => {
         This product is {faker.commerce.productAdjective()}. It is
         {faker.commerce.productMaterial()}.
       </p>
-      <button onClick={() => addToCart(product.id, product.inventory - 1)}>
-        Add to Cart
-      </button>
+      <RenderButton />
     </div>
   );
 };
