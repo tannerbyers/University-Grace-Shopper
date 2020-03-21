@@ -1,4 +1,5 @@
 import React from 'react';
+import SaveForLaterSection from './components/SaveForLater/SaveForLaterSection';
 
 const Orders = ({ lineItems, orders, products })=> {
   return (
@@ -38,6 +39,7 @@ const Orders = ({ lineItems, orders, products })=> {
           })
         }
       </ul>
+      <SaveForLaterSection />
     </div>
   );
 };
