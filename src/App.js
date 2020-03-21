@@ -147,7 +147,7 @@ const App = () => {
               <Link to="/">Home</Link>
             </div>
             <div>
-              <Link to="/Cart"><CartWidget /></Link>
+              <Link to="/Cart"><CartWidget lineItems={lineItems} /></Link>
             </div>
             <div>
               <Link to="/Orders">
