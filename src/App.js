@@ -100,6 +100,10 @@ const App = () => {
       });
   };
 
+  const updateProducts = () => {
+    axios.get("/api/products").then(response => setProducts(response.data));
+  };
+
   const addToCart = (productId, inventory) => {
     event.preventDefault();
     axios
@@ -108,12 +112,14 @@ const App = () => {
         const lineItem = response.data;
         const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
         if (!found) {
+          updateProducts();
           setLineItems([...lineItems, lineItem]);
         } else {
           const updated = lineItems.map(_lineItem =>
             _lineItem.id === lineItem.id ? lineItem : _lineItem
           );
           setLineItems(updated);
+          updateProducts();
         }
       });
   };
