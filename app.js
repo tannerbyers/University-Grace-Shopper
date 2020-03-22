@@ -20,7 +20,7 @@ const isLoggedIn = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "ADMIN") {
-    return next(Error("not authorized"));
+    return next(Error("not authorized: Must be Admin"));
   }
   next();
 };
@@ -64,6 +64,14 @@ app.get("/api/auth", isLoggedIn, (req, res, next) => {
 app.put("/api/auth/:id", (req, res, next) => {
   models.users
     .update(req.body)
+    .then(updatedUser => res.send(updatedUser))
+    .catch(next);
+});
+
+app.put("/api/updateName/:id", (req, res, next) => {
+  console.log(req.body);
+  models.users
+    .updateFirstLast(req.body)
     .then(updatedUser => res.send(updatedUser))
     .catch(next);
 });

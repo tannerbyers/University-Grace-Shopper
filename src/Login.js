@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 const Login = ({ login, createUser }) => {
   const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [wantsToMakeAccount, setWantsToMakeAccount] = useState(true);
@@ -22,10 +24,12 @@ const Login = ({ login, createUser }) => {
     } else {
       ev.preventDefault();
       const role = "USER";
-      createUser({ username, password, role })
+      createUser({ username, firstname, lastname, password, role })
         .catch(ex => setError(ex.response.data.message))
         .then(() => {
           setUsername("");
+          setFirstname("");
+          setLastname("");
           setPassword("");
         });
     }
@@ -53,10 +57,22 @@ const Login = ({ login, createUser }) => {
           <h1>Create an account</h1>
           <div className="error">{error}</div>
           <input
+            placeholder="choose a username"
             value={username}
             onChange={ev => setUsername(ev.target.value)}
           />
           <input
+            placeholder="First name"
+            value={firstname}
+            onChange={ev => setFirstname(ev.target.value)}
+          />
+          <input
+            placeholder="Last name"
+            value={lastname}
+            onChange={ev => setLastname(ev.target.value)}
+          />
+          <input
+            placeholder="choose a password"
             type="password"
             value={password}
             onChange={ev => setPassword(ev.target.value)}
