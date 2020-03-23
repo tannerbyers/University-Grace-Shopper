@@ -1,9 +1,15 @@
 import React from "react";
-import "./components/SaveForLater/SaveForLater"
+import "./components/SaveForLater/SaveForLater";
 import SaveForLater from "./components/SaveForLater/SaveForLater";
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
-  console.log(lineItems)
+  const isZero = (e, lineItemId) => {
+    if (e.target.value == 0) {
+      console.log("OH NO ");
+      removeFromCart(lineItemId)
+    }
+  };
+
   return (
     <div>
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
@@ -23,7 +29,14 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
             return (
               <li key={lineItem.id}>
                 {product && product.name}
-                <span className="quantity">Quantity: {lineItem.quantity}</span>
+                <label>Quantity</label>
+                <input
+                  onChange={(event) => isZero(event, lineItem.id)}
+                  type="number"
+                  min="0"
+                  defaultValue={lineItem.quantity}
+                  max="10"
+                ></input>
                 <button onClick={() => removeFromCart(lineItem.id)}>
                   Remove From Cart
                 </button>
