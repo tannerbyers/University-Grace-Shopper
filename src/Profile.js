@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-const Profile = ({ auth, changePassword }) => {
+const Profile = ({ auth, changePassword, changeName }) => {
   const [newPassword, setNewPassword] = useState("");
   const [reEnteredPassword, setReEnteredPassword] = useState("");
+  const [firstname, setFirstname] = useState(auth.firstname);
+  const [lastname, setLastname] = useState(auth.lastname);
   const [wantsToChangePW, setWantsToChangePW] = useState(true);
+  const [wantsToUpdateProfile, setWantsToUpdateProfile] = useState(true);
 
   useEffect(() => {
     setWantsToChangePW(false);
   }, []);
 
-  const onSubmit = ev => {
+  useEffect(() => {
+    setWantsToUpdateProfile(false);
+  }, []);
+
+  const submitNewPassword = ev => {
     ev.preventDefault();
     if (newPassword === reEnteredPassword) {
       changePassword({
@@ -23,23 +30,66 @@ const Profile = ({ auth, changePassword }) => {
     }
   };
 
+  const submitNewName = ev => {
+    ev.preventDefault();
+    changeName({ firstname: firstname, lastname: lastname, id: auth.id });
+  };
+
   return (
     <div>
-      <h1>Hello, {auth.username}</h1>
-      <button
-        type="button"
-        onClick={() => {
-          if (!wantsToChangePW) setWantsToChangePW(true);
-          else setWantsToChangePW(false);
-          console.log(wantsToChangePW);
-        }}
-      >
-        Change Password
-      </button>
+      <h1>Hello, {auth.firstname}</h1>
       <div>
+        <div>
+          <h3>Profile info</h3>
+          <p>username: {auth.username}</p>
+          <p>firstname: {firstname}</p>
+          <p>lastname: {lastname}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            if (!wantsToUpdateProfile) setWantsToUpdateProfile(true);
+            else setWantsToUpdateProfile(false);
+          }}
+        >
+          Update Profile
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (!wantsToChangePW) setWantsToChangePW(true);
+            else setWantsToChangePW(false);
+          }}
+        >
+          Change Password
+        </button>
+      </div>
+
+      <div>
+        {wantsToUpdateProfile ? (
+          <div>
+            <form onSubmit={submitNewName}>
+              <label>first name</label>
+              <input
+                type="text"
+                value={firstname}
+                onChange={ev => setFirstname(ev.target.value)}
+              />
+              <label>last name</label>
+              <input
+                type="text"
+                value={lastname}
+                onChange={ev => setLastname(ev.target.value)}
+              />
+              <button type="submit">Save changes</button>
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
         {wantsToChangePW ? (
           <div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={submitNewPassword}>
               <label>new password</label>
               <input
                 type="password"

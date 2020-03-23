@@ -23,6 +23,8 @@ const sync = async () => {
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       username VARCHAR(100) NOT NULL UNIQUE,
+      firstname VARCHAR(100),
+      lastname VARCHAR(100),
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
       CHECK (char_length(username) > 0)
@@ -53,18 +55,22 @@ const sync = async () => {
   const _users = {
     lucy: {
       username: "lucy",
+      firstname: "Lucy",
+      lastname: "McLucyson",
       password: "LUCY",
       role: "ADMIN"
     },
     moe: {
       username: "moe",
+      firstname: "Moe",
+      lastname: "McMoeson",
       password: "MOE",
-      role: null
+      role: "USER"
     },
     curly: {
       username: "larry",
       password: "LARRY",
-      role: null
+      role: "USER"
     }
   };
 
@@ -93,6 +99,7 @@ const sync = async () => {
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
   );
+
   const [foo, bar, bazz] = await Promise.all(
     Object.values(_products).map(product => products.create(product))
   );

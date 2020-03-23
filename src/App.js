@@ -134,12 +134,12 @@ const App = () => {
     axios.put(`/api/auth/${auth.id}`, credentials);
   };
 
+  const changeName = async firstAndLastName => {
+    axios.put(`/api/updateName/${auth.id}`, firstAndLastName);
+  };
+
   const createUser = async credentials => {
-    axios
-      .post("/api/createUser", credentials)
-      .then(response =>
-        console.log("response.data from front end", response.data)
-      );
+    axios.post("/api/createUser", credentials);
   };
 
   const { view } = params;
@@ -163,7 +163,12 @@ const App = () => {
               <Link to="/Orders">Orders</Link>
             </div>
           </nav>
-          <button onClick={logout}>Logout {auth.username} </button>
+          <button onClick={logout}>
+            Logout{" "}
+            {auth.firstname === null || auth.lastname === null
+              ? auth.username
+              : auth.firstname + " " + auth.lastname}
+          </button>
           <Link to="/Profile">Profile</Link>
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
@@ -185,7 +190,11 @@ const App = () => {
               />
             </Route>
             <Route path="/Profile">
-              <Profile auth={auth} changePassword={changePassword} />
+              <Profile
+                auth={auth}
+                changePassword={changePassword}
+                changeName={changeName}
+              />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}
