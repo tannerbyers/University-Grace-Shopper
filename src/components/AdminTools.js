@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 
-const AdminTools = ({ users }) => {
+const AdminTools = ({ headers, users, setUsers }) => {
   const toggleUserLock = userToLock => {
     const action = !userToLock.isLocked;
-    axios.put(`/api/lockUser/${userToLock.id}`, {
-      isLocked: action,
-      id: userToLock.id
-    });
+    axios
+      .put(`/api/lockUser/${userToLock.id}`, {
+        isLocked: action,
+        id: userToLock.id
+      })
+      .then(
+        axios.get("/api/getUsers", headers()).then(response => {
+          setUsers(response.data);
+        })
+      );
   };
   return (
     <div>

@@ -151,9 +151,9 @@ const App = () => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
 
-    axios.put("api/products", { productId, quantity }, headers()).then (() => {
+    axios.put("api/products", { productId, quantity }, headers()).then(() => {
       updateProducts();
-    })
+    });
   };
 
   const changePassword = credentials => {
@@ -231,7 +231,7 @@ const App = () => {
               />
             </Route>
             <Route path="/AdminTools">
-              <AdminTools users={users} />
+              <AdminTools headers={headers} users={users} setUsers={setUsers} />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}
