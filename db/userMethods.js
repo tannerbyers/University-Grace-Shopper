@@ -37,6 +37,11 @@ const removeFromCart = async({ lineItemId, userId })=> {
   await client.query(`DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`, [ lineItemId, cart.id ]);
 };
 
+
+const updateProductInventory = async({ productId, quantity })=> {
+  return (await client.query(`UPDATE products set inventory=$1 WHERE id = $2 returning *`, [ quantity, productId ]))
+};
+
 const getLineItems = async(userId)=> {
   const SQL = `
     SELECT "lineItems".* 
@@ -54,5 +59,6 @@ module.exports = {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  updateProductInventory
 }

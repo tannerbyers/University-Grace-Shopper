@@ -137,6 +137,12 @@ app.get("/api/products", (req, res, next) => {
     .catch(next);
 });
 
+app.put("/api/products", (req,res, next) => {
+ db.updateProductInventory(req.body).then(() => {
+   res.send("upadted products")
+ })
+})
+
 app.get("/api/getUsers", (req, res, next) => {
   db.models.users
     .read()
