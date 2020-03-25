@@ -124,10 +124,14 @@ const App = () => {
       });
   };
 
-  const removeFromCart = lineItemId => {
+  const removeFromCart = (lineItemId, productId, quantity) => {
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
+
+    axios.put("api/products", { productId, quantity }, headers()).then (() => {
+      updateProducts();
+    })
   };
 
   const changePassword = async credentials => {

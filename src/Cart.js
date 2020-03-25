@@ -37,7 +37,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
                   defaultValue={lineItem.quantity}
                   max="10"
                 ></input>
-                <button onClick={() => removeFromCart(lineItem.id)}>
+                <button onClick={() => removeFromCart(lineItem.id, product.id, lineItem.quantity + product.inventory)}>
                   Remove From Cart
                 </button>
               </li>

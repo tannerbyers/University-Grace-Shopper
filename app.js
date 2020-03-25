@@ -132,6 +132,12 @@ app.get("/api/products", (req, res, next) => {
     .catch(next);
 });
 
+app.put("/api/products", (req,res, next) => {
+ db.updateProductInventory(req.body).then(() => {
+   res.send("upadted products")
+ })
+})
+
 Object.keys(models).forEach(key => {
   app.get(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
     models[key]
