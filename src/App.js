@@ -6,6 +6,7 @@ import Orders from "./Orders";
 import CartWidget from "./components/Cart/CartWidget";
 import Cart from "./Cart";
 import Profile from "./Profile";
+import AdminTools from "./components/AdminTools";
 import Products from "./Products";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -22,6 +23,7 @@ const headers = () => {
 const App = () => {
   const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)));
   const [auth, setAuth] = useState({});
+  const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [cart, setCart] = useState({});
   const [products, setProducts] = useState([]);
@@ -49,9 +51,23 @@ const App = () => {
   }, [auth]);
 
   useEffect(() => {
+    axios.get("/api/getUsers", headers()).then(response => {
+      setUsers(response.data);
+    });
+  }, [users]);
+
+  useEffect(() => {
     if (auth.id) {
       axios.get("/api/getOrders", headers()).then(response => {
         setOrders(response.data);
+      });
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (auth.role === "ADMIN") {
+      axios.get("/api/getUsers", headers()).then(response => {
+        setUsers(response.data);
       });
     }
   }, [auth]);
@@ -67,7 +83,13 @@ const App = () => {
       return;
     }
     const response = await axios.get("/api/auth", headers());
-    setAuth(response.data);
+    const person = response.data;
+    if (person.isLocked) {
+      console.log("account locked");
+    } else {
+      setAuth(person);
+      console.log(person.isLocked);
+    }
   };
 
   const logout = () => {
@@ -134,15 +156,15 @@ const App = () => {
     })
   };
 
-  const changePassword = async credentials => {
+  const changePassword = credentials => {
     axios.put(`/api/auth/${auth.id}`, credentials);
   };
 
-  const changeName = async firstAndLastName => {
+  const changeName = firstAndLastName => {
     axios.put(`/api/updateName/${auth.id}`, firstAndLastName);
   };
 
-  const createUser = async credentials => {
+  const createUser = credentials => {
     axios.post("/api/createUser", credentials);
   };
 
@@ -166,6 +188,13 @@ const App = () => {
             <div>
               <Link to="/Orders">Orders</Link>
             </div>
+            <div>
+              {auth.role === "ADMIN" ? (
+                <Link to="/AdminTools">Admin Tools</Link>
+              ) : (
+                ""
+              )}
+            </div>
           </nav>
           <button onClick={logout}>
             Logout{" "}
@@ -174,6 +203,7 @@ const App = () => {
               : auth.firstname + " " + auth.lastname}
           </button>
           <Link to="/Profile">Profile</Link>
+
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
           <Switch>
@@ -199,6 +229,9 @@ const App = () => {
                 changePassword={changePassword}
                 changeName={changeName}
               />
+            </Route>
+            <Route path="/AdminTools">
+              <AdminTools users={users} />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}

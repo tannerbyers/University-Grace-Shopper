@@ -28,6 +28,7 @@ const sync = async () => {
       lastname VARCHAR(100),
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
+      "isLocked" BOOL DEFAULT FALSE,
       CHECK (char_length(username) > 0)
     );
 
@@ -59,19 +60,22 @@ const sync = async () => {
       firstname: "Lucy",
       lastname: "McLucyson",
       password: "LUCY",
-      role: "ADMIN"
+      role: "ADMIN",
+      isLocked: false
     },
     moe: {
       username: "moe",
       firstname: "Moe",
       lastname: "McMoeson",
       password: "MOE",
-      role: "USER"
+      role: "USER",
+      isLocked: true
     },
     curly: {
       username: "larry",
       password: "LARRY",
-      role: "USER"
+      role: "USER",
+      isLocked: false
     }
   };
 
