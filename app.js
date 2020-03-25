@@ -69,10 +69,16 @@ app.put("/api/auth/:id", (req, res, next) => {
 });
 
 app.put("/api/updateName/:id", (req, res, next) => {
-  console.log(req.body);
   models.users
     .updateFirstLast(req.body)
     .then(updatedUser => res.send(updatedUser))
+    .catch(next);
+});
+
+app.put("/api/lockUser/:id", (req, res, next) => {
+  models.users
+    .lockOrUnlockUser(req.body)
+    .then(lockededUser => res.send(lockededUser))
     .catch(next);
 });
 
@@ -81,7 +87,6 @@ app.post("/api/createUser", (req, res, next) => {
   models.users
     .create(req.body)
     .then(newUser => res.send(newUser))
-    .then(() => console.log("SERVER POST REQUEST INVOKED"))
     .catch(next);
 });
 
@@ -129,6 +134,13 @@ app.get("/api/products", (req, res, next) => {
   db.models.products
     .read()
     .then(products => res.send(products))
+    .catch(next);
+});
+
+app.get("/api/getUsers", (req, res, next) => {
+  db.models.users
+    .read()
+    .then(users => res.send(users))
     .catch(next);
 });
 
