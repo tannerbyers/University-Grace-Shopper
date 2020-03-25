@@ -54,7 +54,7 @@ const App = () => {
     axios.get("/api/getUsers", headers()).then(response => {
       setUsers(response.data);
     });
-  }, [users]);
+  }, []);
 
   useEffect(() => {
     if (auth.id) {
