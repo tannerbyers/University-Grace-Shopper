@@ -11,7 +11,7 @@ const ratings = {
     return (await client.query(SQL, [rating, userId, productId])).rows[0];
   },
   average: async ({ productId }) => {
-    "SELECT AVG(rating) from ratings WHERE productId = $1";
+    const SQL = "SELECT AVG(rating) FROM ratings WHERE productId = $1";
     return (await client.query(SQL, [productId])).rows[0];
   }
 };

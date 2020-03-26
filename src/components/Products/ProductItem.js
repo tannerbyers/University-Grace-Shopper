@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import faker from "faker";
 import axios from "axios";
+import Rating from "../Rating";
 
 const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
@@ -10,7 +11,7 @@ const ProductItem = ({ product, addToCart }) => {
   useEffect(() => {
     axios
       .get("/api/avgratings", { params: { productId: product.id } })
-      .then(rating => console.log(rating));
+      .then(rating => setRating(Math.round(rating.data.avg)));
   }, []);
 
   const handleClick = e => {
@@ -45,8 +46,9 @@ const ProductItem = ({ product, addToCart }) => {
         </button>
       </h1>
       <p className={details}>
-        This product is {faker.commerce.productAdjective()}. It is
-        {faker.commerce.productMaterial()}.
+        This product is {faker.commerce.productAdjective()}.<br></br>
+        Average Rating
+        <Rating active={false} rating={rating} />
       </p>
       <RenderButton />
     </div>
