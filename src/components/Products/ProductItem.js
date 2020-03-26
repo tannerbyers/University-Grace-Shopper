@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import faker from "faker";
+import axios from "axios";
 
 const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
+  const [rating, setRating] = useState();
+
+  useEffect(() => {
+    axios
+      .get("/api/avgratings", { params: { productId: product.id } })
+      .then(rating => console.log(rating));
+  }, []);
 
   const handleClick = e => {
     if (details == "") {

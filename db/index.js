@@ -17,6 +17,7 @@ const {
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    DROP TABLE IF EXISTS ratings;
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
     DROP TABLE IF EXISTS users;
@@ -50,6 +51,11 @@ const sync = async () => {
       "orderId" UUID REFERENCES orders(id) NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
+    );
+    CREATE TABLE ratings(
+      rating INTEGER DEFAULT NULL,
+      userId UUID REFERENCES users(id) NOT NULL,
+      productId UUID references products(id) NOT NULL
     );
   `;
   await client.query(SQL);

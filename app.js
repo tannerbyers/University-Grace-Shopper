@@ -137,11 +137,40 @@ app.get("/api/products", (req, res, next) => {
     .catch(next);
 });
 
-app.put("/api/products", (req,res, next) => {
- db.updateProductInventory(req.body).then(() => {
-   res.send("upadted products")
- })
-})
+app.put("/api/products", (req, res, next) => {
+  db.updateProductInventory(req.body).then(() => {
+    res.send("updated products");
+  });
+});
+
+app.get("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .read({
+      userId: req.query.userId,
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.get("/api/avgratings", (req, res, next) => {
+  db.models.ratings
+    .average({
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.post("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .create({
+      rating: req.body.rating,
+      userId: req.body.userId,
+      productId: req.body.productId
+    })
+    .then(rating => res.send(rating));
+});
 
 app.get("/api/getUsers", (req, res, next) => {
   db.models.users
