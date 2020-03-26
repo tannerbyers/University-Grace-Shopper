@@ -146,15 +146,19 @@ const App = () => {
       });
   };
 
-  const removeFromCart = (lineItemId, productId, quantity) => {
+  const removeFromCart = (lineItemId, productId, inventory, quantity) => {
+
+
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
 
-    axios.put("api/products", { productId, quantity }, headers()).then (() => {
+    axios
+    .put("/api/products", { productId, inventory, lineItemId, quantity })
+    .then(() => {
       updateProducts();
-    })
-  };
+      getLineItems();
+    });  };
 
   const changePassword = credentials => {
     axios.put(`/api/auth/${auth.id}`, credentials);
@@ -166,6 +170,12 @@ const App = () => {
 
   const createUser = credentials => {
     axios.post("/api/createUser", credentials);
+  };
+
+  const getLineItems = () => {
+    axios.get("/api/getLineItems", headers()).then(response => {
+      setLineItems(response.data);
+    });
   };
 
   const { view } = params;
@@ -214,6 +224,9 @@ const App = () => {
                 cart={cart}
                 createOrder={createOrder}
                 products={products}
+                addToCart={addToCart}
+                updateProducts={updateProducts}
+                getLineItems={getLineItems}
               />{" "}
             </Route>
             <Route path="/Orders">
@@ -231,7 +244,7 @@ const App = () => {
               />
             </Route>
             <Route path="/AdminTools">
-              <AdminTools users={users} />
+              <AdminTools headers={headers} users={users} setUsers={setUsers} />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}

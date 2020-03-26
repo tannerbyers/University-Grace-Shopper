@@ -1,15 +1,28 @@
 import React from "react";
 import "./components/SaveForLater/SaveForLater";
 import SaveForLater from "./components/SaveForLater/SaveForLater";
+import axios from "axios";
 
-const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
-  const isZero = (e, lineItemId) => {
-    if (e.target.value == 0) {
-      console.log("OH NO ");
-      removeFromCart(lineItemId)
-    }
+const Cart = ({
+  lineItems,
+  cart,
+  createOrder,
+  removeFromCart,
+  products,
+  updateProducts,
+  getLineItems
+}) => {
+  const updateInventory = (productId, inventory, lineItemId, quantity) => {
+    axios
+      .put("/api/products", { productId, inventory, lineItemId, quantity })
+      .then(() => {
+        updateProducts();
+        getLineItems();
+      });
   };
 
+  console.log("products", products);
+  console.log("line items", lineItems);
   return (
     <div>
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
@@ -30,14 +43,50 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
               <li key={lineItem.id}>
                 {product && product.name}
                 <label>Quantity</label>
-                <input
-                  onChange={(event) => isZero(event, lineItem.id)}
-                  type="number"
-                  min="0"
-                  defaultValue={lineItem.quantity}
-                  max="10"
-                ></input>
-                <button onClick={() => removeFromCart(lineItem.id, product.id, lineItem.quantity + product.inventory)}>
+                <p>
+                  {lineItem.quantity == 0
+                    ? removeFromCart(
+                        lineItem.id,
+                        product.id,
+                        lineItem.quantity + product.inventory,
+                        0
+                      )
+                    : lineItem.quantity}
+                </p>
+                <button
+                  onClick={() => {
+                    updateInventory(
+                      lineItem.productId,
+                      product.inventory - 1,
+                      lineItem.id,
+                      lineItem.quantity + 1
+                    );
+                  }}
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => {
+                    updateInventory(
+                      lineItem.productId,
+                      product.inventory + 1,
+                      lineItem.id,
+                      lineItem.quantity - 1
+                    );
+                  }}
+                >
+                  -
+                </button>{" "}
+                <button
+                  onClick={() => {
+                    removeFromCart(
+                      lineItem.id,
+                      product.id,
+                      lineItem.quantity + product.inventory,
+                      0
+                    );
+                  }}
+                >
                   Remove From Cart
                 </button>
               </li>

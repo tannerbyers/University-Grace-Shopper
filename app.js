@@ -18,6 +18,7 @@ const isLoggedIn = (req, res, next) => {
   next();
 };
 
+
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "ADMIN") {
     return next(Error("not authorized: Must be Admin"));
@@ -139,10 +140,11 @@ app.get("/api/products", (req, res, next) => {
 
 app.put("/api/products", (req, res, next) => {
   db.updateProductInventory(req.body).then(() => {
-    res.send("updated products");
+    db.updateLineItemInventory(req.body).then(() => {
+      res.send(products);
+    });
   });
-});
-
+  
 app.get("/api/ratings", (req, res, next) => {
   db.models.ratings
     .read({
