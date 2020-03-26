@@ -18,7 +18,6 @@ const isLoggedIn = (req, res, next) => {
   next();
 };
 
-
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "ADMIN") {
     return next(Error("not authorized: Must be Admin"));
@@ -146,6 +145,34 @@ app.put("/api/products", (req, res, next) => {
   });
 });
 
+app.get("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .read({
+      userId: req.query.userId,
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.get("/api/avgratings", (req, res, next) => {
+  db.models.ratings
+    .average({
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.post("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .create({
+      rating: req.body.rating,
+      userId: req.body.userId,
+      productId: req.body.productId
+    })
+    .then(rating => res.send(rating));
+});
 
 app.get("/api/getUsers", (req, res, next) => {
   db.models.users
