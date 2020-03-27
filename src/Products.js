@@ -4,7 +4,7 @@ import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
 import ProductNav from "./components/Products/ProductNav";
 
-const Products = ({ products, addToCart }) => {
+const Products = ({ auth, products, addToCart }) => {
   let sortedProducts = products;
 
   function compare(a, b) {
@@ -30,6 +30,7 @@ const Products = ({ products, addToCart }) => {
             return (
               <ProductItem
                 key={product.id}
+                auth={auth}
                 addToCart={addToCart}
                 product={product}
               />

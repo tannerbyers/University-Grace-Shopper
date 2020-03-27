@@ -124,6 +124,14 @@ app.post("/api/addToCart", (req, res, next) => {
     .catch(next);
 });
 
+// app.post("/api/addToGuestCart", (req, res, next) => {
+//   db.models.products.update({
+//     inventory: req.body.inventory,
+//     productId: req.body.productId
+//   })
+//   db.addToGuestCart()
+// })
+
 app.delete("/api/removeFromCart/:id", (req, res, next) => {
   db.removeFromCart({ userId: req.user.id, lineItemId: req.params.id })
     .then(() => res.sendStatus(204))
@@ -143,6 +151,13 @@ app.put("/api/products", (req, res, next) => {
       res.send(products);
     });
   });
+});
+
+app.put("/api/productsGuest/:productId", (req, res, next) => {
+  db.models.products
+    .update(req.body)
+    .then(updatedProduct => res.send(updatedProduct))
+    .catch(next);
 });
 
 app.get("/api/ratings", (req, res, next) => {

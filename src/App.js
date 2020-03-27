@@ -147,18 +147,17 @@ const App = () => {
   };
 
   const removeFromCart = (lineItemId, productId, inventory, quantity) => {
-
-
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
 
     axios
-    .put("/api/products", { productId, inventory, lineItemId, quantity })
-    .then(() => {
-      updateProducts();
-      getLineItems();
-    });  };
+      .put("/api/products", { productId, inventory, lineItemId, quantity })
+      .then(() => {
+        updateProducts();
+        getLineItems();
+      });
+  };
 
   const changePassword = credentials => {
     axios.put(`/api/auth/${auth.id}`, credentials);
@@ -180,80 +179,83 @@ const App = () => {
 
   const { view } = params;
 
-  if (!auth.id) {
-    return <Login login={login} createUser={createUser} />;
-  } else {
-    return (
-      <Router>
-        <div>
-          <nav className="header">
-            <div>
-              <Link to="/">Home</Link>
-            </div>
-            <div>
-              <Link to="/Cart">
-                <CartWidget lineItems={lineItems} />
-              </Link>
-            </div>
-            <div>
-              <Link to="/Orders">Orders</Link>
-            </div>
-            <div>
-              {auth.role === "ADMIN" ? (
-                <Link to="/AdminTools">Admin Tools</Link>
-              ) : (
-                ""
-              )}
-            </div>
-          </nav>
-          <button onClick={logout}>
-            Logout{" "}
-            {auth.firstname === null || auth.lastname === null
-              ? auth.username
-              : auth.firstname + " " + auth.lastname}
-          </button>
-          <Link to="/Profile">Profile</Link>
+  return (
+    <Router>
+      <div>
+        <nav className="header">
+          <div>
+            <Link to="/">Home</Link>
+          </div>
+          <div>
+            <Link to="/Cart">
+              <CartWidget lineItems={lineItems} />
+            </Link>
+          </div>
+          <div>
+            <Link to="/Orders">Orders</Link>
+          </div>
+          <div>
+            {auth.role === "ADMIN" ? (
+              <Link to="/AdminTools">Admin Tools</Link>
+            ) : (
+              ""
+            )}
+          </div>
+        </nav>
+        {auth.id ? (
+          <Link to="/">
+            <button onClick={logout}>
+              Logout{" "}
+              {auth.firstname === null || auth.lastname === null
+                ? auth.username
+                : auth.firstname + " " + auth.lastname}
+            </button>
+          </Link>
+        ) : (
+          <div>
+            <Link to="/Login">Log in</Link>
+          </div>
+        )}
+        {auth.id ? <Link to="/Profile">Profile</Link> : ""}
 
-          {/* A <Switch> looks through its children <Route>s and
+        {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/Cart">
-              <Cart
-                lineItems={lineItems}
-                removeFromCart={removeFromCart}
-                cart={cart}
-                createOrder={createOrder}
-                products={products}
-                addToCart={addToCart}
-                updateProducts={updateProducts}
-                getLineItems={getLineItems}
-              />{" "}
-            </Route>
-            <Route path="/Orders">
-              <Orders
-                lineItems={lineItems}
-                products={products}
-                orders={orders}
-              />
-            </Route>
-            <Route path="/Profile">
-              <Profile
-                auth={auth}
-                changePassword={changePassword}
-                changeName={changeName}
-              />
-            </Route>
-            <Route path="/AdminTools">
-              <AdminTools headers={headers} users={users} setUsers={setUsers} />
-            </Route>
-            <Route path="/">
-              <Products addToCart={addToCart} products={products} />{" "}
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    );
-  }
+        <Switch>
+          <Route path="/Cart">
+            <Cart
+              lineItems={lineItems}
+              removeFromCart={removeFromCart}
+              cart={cart}
+              createOrder={createOrder}
+              products={products}
+              addToCart={addToCart}
+              updateProducts={updateProducts}
+              getLineItems={getLineItems}
+            />{" "}
+          </Route>
+          <Route path="/Orders">
+            <Orders lineItems={lineItems} products={products} orders={orders} />
+          </Route>
+          <Route path="/Profile">
+            <Profile
+              auth={auth}
+              changePassword={changePassword}
+              changeName={changeName}
+            />
+          </Route>
+          <Route path="/Login">
+            <Login login={login} createUser={createUser} />
+          </Route>
+          <Route path="/AdminTools">
+            <AdminTools headers={headers} users={users} setUsers={setUsers} />
+          </Route>
+          <Route path="/">
+            <Products auth={auth} addToCart={addToCart} products={products} />{" "}
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 };
 
 export default App;

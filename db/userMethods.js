@@ -71,7 +71,12 @@ const removeFromCart = async ({ lineItemId, userId }) => {
 };
 
 const updateProductInventory = async ({ productId, inventory }) => {
-  console.log("Product Id in userMethod", productId, "Inventory in userMethod", inventory)
+  console.log(
+    "Product Id in userMethod",
+    productId,
+    "Inventory in userMethod",
+    inventory
+  );
 
   return await client.query(
     `UPDATE products set inventory=$1 WHERE id = $2 returning *`,
