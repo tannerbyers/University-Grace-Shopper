@@ -28,6 +28,13 @@ const App = () => {
   const [cart, setCart] = useState({});
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
+  const [saveForLaterItems, setSaveForLaterItems] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/saveforlateritems", headers()).then(response => {
+      setSaveForLaterItems(response.data);
+    });
+  }, []);
 
   useEffect(() => {
     axios.get("/api/products").then(response => setProducts(response.data));
@@ -147,18 +154,17 @@ const App = () => {
   };
 
   const removeFromCart = (lineItemId, productId, inventory, quantity) => {
-
-
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
 
     axios
-    .put("/api/products", { productId, inventory, lineItemId, quantity })
-    .then(() => {
-      updateProducts();
-      getLineItems();
-    });  };
+      .put("/api/products", { productId, inventory, lineItemId, quantity })
+      .then(() => {
+        updateProducts();
+        getLineItems();
+      });
+  };
 
   const changePassword = credentials => {
     axios.put(`/api/auth/${auth.id}`, credentials);
@@ -227,6 +233,9 @@ const App = () => {
                 addToCart={addToCart}
                 updateProducts={updateProducts}
                 getLineItems={getLineItems}
+                headers={headers}
+                saveForLaterItems={saveForLaterItems}
+                setSaveForLaterItems={setSaveForLaterItems}
               />{" "}
             </Route>
             <Route path="/Orders">

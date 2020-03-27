@@ -10,7 +10,10 @@ const Cart = ({
   removeFromCart,
   products,
   updateProducts,
-  getLineItems
+  getLineItems,
+  headers,
+  saveForLaterItems,
+  setSaveForLaterItems
 }) => {
   const updateInventory = (productId, inventory, lineItemId, quantity) => {
     axios
@@ -18,6 +21,19 @@ const Cart = ({
       .then(() => {
         updateProducts();
         getLineItems();
+      });
+  };
+
+  const saveItemForLater = (name, price) => {
+    console.log("clicked saved for later");
+
+    axios
+      .post("/api/saveforlateritems", { name, price }, headers())
+      .then(response => {
+        axios.get("/api/saveforlateritems", headers()).then(response => {
+          console.log('current saveforlaterlit', response.data)
+          setSaveForLaterItems(response.data);
+        });
       });
   };
 
@@ -53,6 +69,23 @@ const Cart = ({
                       )
                     : lineItem.quantity}
                 </p>
+                <button
+                  onClick={() => {
+                    saveItemForLater(
+                      product.name,
+                      product.price,
+                      product.inventory
+                    );
+                    removeFromCart(
+                      lineItem.id,
+                      product.id,
+                      lineItem.quantity + product.inventory,
+                      0
+                    );
+                  }}
+                >
+                  Save for later
+                </button>
                 <button
                   onClick={() => {
                     updateInventory(
@@ -93,7 +126,11 @@ const Cart = ({
             );
           })}
       </ul>
-      <SaveForLater />
+      <SaveForLater
+        saveForLaterItems={saveForLaterItems}
+        setSaveForLaterItems={setSaveForLaterItems}
+        headers={headers}
+      />
     </div>
   );
 };

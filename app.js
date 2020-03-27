@@ -174,6 +174,31 @@ app.post("/api/ratings", (req, res, next) => {
     .then(rating => res.send(rating));
 });
 
+app.post("/api/saveforlateritems", (req, res, next) => {
+  db.models.saveforlateritems
+    .create({
+      name: req.body.name,
+      price: req.body.price,
+      userId: req.user.id
+    })
+    .then(saveforlateitem => res.send(saveforlateitem))
+    .catch(next);
+});
+
+app.get("/api/saveforlateritems", (req, res, next) => {
+  db.models.saveforlateritems
+    .read()
+    .then(saveforlateritems => res.send(saveforlateritems))
+    .catch(next);
+});
+
+app.delete("/api/saveforlateritems/:id", (req, res, next) => {
+  db.models.saveforlateritems
+    .delete(req.params.id)
+    .then(saveforlateritems => res.send(saveforlateritems))
+    .catch(next);
+});
+
 app.get("/api/getUsers", (req, res, next) => {
   db.models.users
     .read()
