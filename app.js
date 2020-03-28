@@ -137,6 +137,13 @@ app.get("/api/products", (req, res, next) => {
     .catch(next);
 });
 
+app.put("/api/guestProducts", (req, res, next) => {
+  db.models.products
+    .update(req.body)
+    .then(updatedProduct => res.send(updatedProduct))
+    .catch(next);
+});
+
 app.put("/api/products", (req, res, next) => {
   db.updateProductInventory(req.body).then(() => {
     db.updateLineItemInventory(req.body).then(() => {

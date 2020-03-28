@@ -8,6 +8,9 @@ import Cart from "./Cart";
 import Profile from "./Profile";
 import AdminTools from "./components/AdminTools";
 import Products from "./Products";
+import GuestProducts from "./GuestProducts";
+import GuestCart from "./GuestCart";
+import GuestOrders from "./GuestOrders";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const headers = () => {
@@ -147,18 +150,17 @@ const App = () => {
   };
 
   const removeFromCart = (lineItemId, productId, inventory, quantity) => {
-
-
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
     });
 
     axios
-    .put("/api/products", { productId, inventory, lineItemId, quantity })
-    .then(() => {
-      updateProducts();
-      getLineItems();
-    });  };
+      .put("/api/products", { productId, inventory, lineItemId, quantity })
+      .then(() => {
+        updateProducts();
+        getLineItems();
+      });
+  };
 
   const changePassword = credentials => {
     axios.put(`/api/auth/${auth.id}`, credentials);
@@ -180,12 +182,50 @@ const App = () => {
 
   const { view } = params;
 
-  if (!auth.id) {
-    return <Login login={login} createUser={createUser} />;
-  } else {
-    return (
-      <Router>
+  return (
+    <Router>
+      {/*
+      The page that loads when a user is NOT logged in
+    */}
+      {!auth.id ? (
         <div>
+          <nav className="header">
+            <div>
+              <Link to="/">Home</Link>
+            </div>
+            <div>
+              <Link to="/GuestCart">
+                <CartWidget lineItems={lineItems} />
+              </Link>
+            </div>
+            <div>
+              <Link to="/GuestOrders">Orders</Link>
+            </div>
+            <div>
+              <Link to="/Login">Login</Link>
+            </div>
+          </nav>
+
+          <Switch>
+            <Route path="/GuestCart">
+              <GuestCart products={products} />
+            </Route>
+            <Route path="/GuestOrders">
+              <GuestOrders />
+            </Route>
+            <Route path="/Login">
+              <Login login={login} createUser={createUser} />
+            </Route>
+            <Route path="/">
+              <GuestProducts products={products} />
+            </Route>
+          </Switch>
+        </div>
+      ) : (
+        <div>
+          {/*
+          The page that loads when a user IS logged in
+          */}
           <nav className="header">
             <div>
               <Link to="/">Home</Link>
@@ -206,12 +246,15 @@ const App = () => {
               )}
             </div>
           </nav>
-          <button onClick={logout}>
-            Logout{" "}
-            {auth.firstname === null || auth.lastname === null
-              ? auth.username
-              : auth.firstname + " " + auth.lastname}
-          </button>
+          <Link to="/">
+            <button onClick={logout}>
+              Logout{" "}
+              {auth.firstname === null || auth.lastname === null
+                ? auth.username
+                : auth.firstname + " " + auth.lastname}
+            </button>
+          </Link>
+
           <Link to="/Profile">Profile</Link>
 
           {/* A <Switch> looks through its children <Route>s and
@@ -251,9 +294,9 @@ const App = () => {
             </Route>
           </Switch>
         </div>
-      </Router>
-    );
-  }
+      )}
+    </Router>
+  );
 };
 
 export default App;
