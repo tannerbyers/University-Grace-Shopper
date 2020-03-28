@@ -148,6 +148,13 @@ app.get("/api/addresses", (req, res, next) => {
     .catch(next);
 });
 
+app.get("/api/Oaddresses", (req, res, next) => {
+  db.models.addresses
+    .readorder({ userId: req.query.userId, orderId: req.query.orderId })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
 app.get("/api/products", (req, res, next) => {
   db.models.products
     .read()

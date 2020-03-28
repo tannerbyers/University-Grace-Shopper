@@ -2,6 +2,7 @@ import React from "react";
 import OrderProduct from "./components/Orders/OrderProduct";
 
 const Orders = ({ lineItems, orders, products }) => {
+  console.log(products);
   return (
     <div>
       <h2>Orders</h2>
@@ -10,6 +11,7 @@ const Orders = ({ lineItems, orders, products }) => {
           const _lineItems = lineItems.filter(
             lineItem => lineItem.orderId === order.id
           );
+
           return (
             <li key={order.id}>
               <div>OrderID: {order.id.slice(0, 4)}</div>
