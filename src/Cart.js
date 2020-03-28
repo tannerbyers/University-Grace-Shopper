@@ -22,13 +22,22 @@ const Cart = ({
   };
 
   let [address, setAddress] = useState("");
+  let [savedAddresses, setSaved] = useState([]);
 
   const handleInput = e => {
     setAddress(e.target.value);
   };
 
   let userId = cart.userId;
-  let orderId = cart.id.slice(0, 4);
+  let orderId = cart.id;
+
+  useEffect(() => {
+    axios
+      .get("/api/addresses", {
+        params: { userId: userId, orderId: orderId }
+      })
+      .then(addresses => setSaved([addresses.data]));
+  }, []);
 
   const handleClick = e => {
     if (address !== "") {
@@ -40,6 +49,8 @@ const Cart = ({
       alert("Please provide an address");
     }
   };
+
+  console.log(savedAddresses);
 
   return (
     <div>
@@ -55,6 +66,16 @@ const Cart = ({
         type="text"
         placeholder="Please provide an address"
       ></input>
+      <select>
+        {savedAddresses &&
+          savedAddresses.map(address => {
+            return (
+              <option key={Math.random()} value={address.address}>
+                {address.address}
+              </option>
+            );
+          })}
+      </select>
       <ul>
         {lineItems
           .filter(lineItem => lineItem.orderId === cart.id)

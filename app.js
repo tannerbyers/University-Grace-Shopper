@@ -131,23 +131,19 @@ app.delete("/api/removeFromCart/:id", (req, res, next) => {
 });
 
 app.post("/api/addresses", (req, res, next) => {
-  console.log(req.body.userId, req.body.address, req.body.orderId);
   db.models.addresses
     .create({
       address: req.body.address,
       userId: req.body.userId,
       orderId: req.body.orderId
     })
-    .then(address => {
-      console.log(address);
-      res.send(address);
-    })
+    .then(address => res.send(address))
     .catch(next);
 });
 
 app.get("/api/addresses", (req, res, next) => {
   db.models.addresses
-    .read({ userId: req.body.userId })
+    .read({ userId: req.query.userId, orderId: req.query.orderId })
     .then(address => res.send(address))
     .catch(next);
 });

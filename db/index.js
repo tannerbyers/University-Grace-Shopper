@@ -52,8 +52,8 @@ const sync = async () => {
 
     CREATE TABLE addresses(
       address VARCHAR(256) NOT NULL,
-      userId UUID REFERENCES users(id),
-      orderId UUID REFERENCES orders(id)
+      userId UUID REFERENCES users(id) NOT NULL,
+      orderId UUID REFERENCES orders(id) NOT NULL
     );
 
     CREATE TABLE "lineItems"(
