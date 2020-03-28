@@ -130,6 +130,24 @@ app.delete("/api/removeFromCart/:id", (req, res, next) => {
     .catch(next);
 });
 
+app.post("/api/addresses", (req, res, next) => {
+  db.models.addresses
+    .create({
+      address: req.body.address,
+      userId: req.body.userId,
+      orderId: req.body.orderId
+    })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
+app.get("/api/addresses", (req, res, next) => {
+  db.models.addresses
+    .read({ userId: req.query.userId, orderId: req.query.orderId })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
 app.get("/api/products", (req, res, next) => {
   db.models.products
     .read()

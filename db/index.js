@@ -18,13 +18,14 @@ const {
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    DROP TABLE IF EXISTS addresses;
     DROP TABLE IF EXISTS saveforlateritems;
     DROP TABLE IF EXISTS ratings;
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
-
+    
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       username VARCHAR(100) NOT NULL UNIQUE,
@@ -49,6 +50,13 @@ const sync = async () => {
       status VARCHAR(10) DEFAULT 'CART',
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE addresses(
+      address VARCHAR(256) NOT NULL,
+      userId UUID REFERENCES users(id) NOT NULL,
+      orderId UUID REFERENCES orders(id) NOT NULL
+    );
+
     CREATE TABLE "lineItems"(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       "orderId" UUID REFERENCES orders(id) NOT NULL,

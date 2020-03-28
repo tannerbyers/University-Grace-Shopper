@@ -8,7 +8,7 @@ const ratings = {
   },
   create: async ({ rating, userId, productId }) => {
     const SQL = `INSERT INTO ratings(rating, userId, productId) values($1, $2, $3) returning *`;
-    return (await client.query(SQL, [rating, userId, productId])).rows[0];
+    console.log((await client.query(SQL, [rating, userId, productId])).rows[0]);
   },
   average: async ({ productId }) => {
     const SQL = "SELECT AVG(rating) FROM ratings WHERE productId = $1";

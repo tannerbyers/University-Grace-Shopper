@@ -4,5 +4,6 @@ module.exports = {
   orders: require("./orders"),
   lineItems: require("./lineItems"),
   ratings: require("./ratings"),
+  addresses: require("./addresses"),
   saveforlateritems: require("./saveforlateritems")
 };

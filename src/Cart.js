@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./components/SaveForLater/SaveForLater";
 import SaveForLater from "./components/SaveForLater/SaveForLater";
 import axios from "axios";
@@ -24,6 +24,37 @@ const Cart = ({
       });
   };
 
+  let [address, setAddress] = useState("");
+  let [savedAddresses, setSaved] = useState([]);
+
+  const handleInput = e => {
+    setAddress(e.target.value);
+  };
+
+  let userId = cart.userId;
+  let orderId = cart.id;
+
+  useEffect(() => {
+    axios
+      .get("/api/addresses", {
+        params: { userId: userId, orderId: orderId }
+      })
+      .then(addresses => setSaved([addresses.data]));
+  }, []);
+
+  const handleClick = e => {
+    if (address !== "") {
+      axios
+        .post("/api/addresses", { address, userId, orderId })
+        .then(add => console.log(add));
+      createOrder();
+    } else {
+      alert("Please provide an address");
+    }
+  };
+
+  console.log(savedAddresses);
+
   const saveItemForLater = (name, price) => {
     console.log("clicked saved for later");
 
@@ -37,17 +68,30 @@ const Cart = ({
       });
   };
 
-  console.log("products", products);
-  console.log("line items", lineItems);
   return (
     <div>
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
       <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={createOrder}
+        onClick={handleClick}
       >
         Create Order
       </button>
+      <input
+        onChange={handleInput}
+        type="text"
+        placeholder="Please provide an address"
+      ></input>
+      <select>
+        {savedAddresses &&
+          savedAddresses.map(address => {
+            return (
+              <option key={Math.random()} value={address.address}>
+                {address.address}
+              </option>
+            );
+          })}
+      </select>
       <ul>
         {lineItems
           .filter(lineItem => lineItem.orderId === cart.id)
