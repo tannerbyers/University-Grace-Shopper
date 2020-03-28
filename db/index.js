@@ -2,7 +2,7 @@ const client = require("./client");
 
 const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems } = require("./models"));
+const models = ({ products, users, orders, lineItems, saveforlateritems } = require("./models"));
 
 const {
   getCart,
@@ -19,6 +19,7 @@ const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS addresses;
+    DROP TABLE IF EXISTS saveforlateritems;
     DROP TABLE IF EXISTS ratings;
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
@@ -61,6 +62,12 @@ const sync = async () => {
       "orderId" UUID REFERENCES orders(id) NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
+    );
+    CREATE TABLE saveforlateritems(
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      name VARCHAR(100) NOT NULL UNIQUE,
+      price DECIMAL NOT NULL,
+      "userId" UUID REFERENCES users(id) NOT NULL
     );
     CREATE TABLE ratings(
       rating INTEGER DEFAULT NULL,
@@ -161,5 +168,6 @@ module.exports = {
   createOrder,
   getLineItems,
   updateProductInventory,
-  updateLineItemInventory
+  updateLineItemInventory,
+  saveforlateritems
 };
