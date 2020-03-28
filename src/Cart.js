@@ -1,15 +1,97 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import "./components/SaveForLater/SaveForLater";
+import SaveForLater from "./components/SaveForLater/SaveForLater";
+import axios from "axios";
 
-const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
+const Cart = ({
+  lineItems,
+  cart,
+  createOrder,
+  removeFromCart,
+  products,
+  updateProducts,
+  getLineItems,
+  headers,
+  saveForLaterItems,
+  setSaveForLaterItems
+}) => {
+  const updateInventory = (productId, inventory, lineItemId, quantity) => {
+    axios
+      .put("/api/products", { productId, inventory, lineItemId, quantity })
+      .then(() => {
+        updateProducts();
+        getLineItems();
+      });
+  };
+
+  let [address, setAddress] = useState("");
+  let [savedAddresses, setSaved] = useState([]);
+
+  const handleInput = e => {
+    setAddress(e.target.value);
+  };
+
+  let userId = cart.userId;
+  let orderId = cart.id;
+
+  useEffect(() => {
+    axios
+      .get("/api/addresses", {
+        params: { userId: userId, orderId: orderId }
+      })
+      .then(addresses => setSaved([addresses.data]));
+  }, []);
+
+  const handleClick = e => {
+    if (address !== "") {
+      axios
+        .post("/api/addresses", { address, userId, orderId })
+        .then(add => console.log(add));
+      createOrder();
+    } else {
+      alert("Please provide an address");
+    }
+  };
+
+  console.log(savedAddresses);
+
+  const saveItemForLater = (name, price) => {
+    console.log("clicked saved for later");
+
+    axios
+      .post("/api/saveforlateritems", { name, price }, headers())
+      .then(response => {
+        axios.get("/api/saveforlateritems", headers()).then(response => {
+          console.log('current saveforlaterlit', response.data)
+          setSaveForLaterItems(response.data);
+        });
+      });
+  };
+
   return (
     <div>
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
       <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={createOrder}
+        onClick={handleClick}
       >
         Create Order
       </button>
+      <input
+        onChange={handleInput}
+        type="text"
+        placeholder="Please provide an address"
+      ></input>
+      <select>
+        {savedAddresses &&
+          savedAddresses.map(address => {
+            return (
+              <option key={Math.random()} value={address.address}>
+                {address.address}
+              </option>
+            );
+          })}
+      </select>
       <ul>
         {lineItems
           .filter(lineItem => lineItem.orderId === cart.id)
@@ -20,14 +102,79 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products }) => {
             return (
               <li key={lineItem.id}>
                 {product && product.name}
-                <span className="quantity">Quantity: {lineItem.quantity}</span>
-                <button onClick={() => removeFromCart(lineItem.id)}>
+                <label>Quantity</label>
+                <p>
+                  {lineItem.quantity == 0
+                    ? removeFromCart(
+                        lineItem.id,
+                        product.id,
+                        lineItem.quantity + product.inventory,
+                        0
+                      )
+                    : lineItem.quantity}
+                </p>
+                <button
+                  onClick={() => {
+                    saveItemForLater(
+                      product.name,
+                      product.price,
+                      product.inventory
+                    );
+                    removeFromCart(
+                      lineItem.id,
+                      product.id,
+                      lineItem.quantity + product.inventory,
+                      0
+                    );
+                  }}
+                >
+                  Save for later
+                </button>
+                <button
+                  onClick={() => {
+                    updateInventory(
+                      lineItem.productId,
+                      product.inventory - 1,
+                      lineItem.id,
+                      lineItem.quantity + 1
+                    );
+                  }}
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => {
+                    updateInventory(
+                      lineItem.productId,
+                      product.inventory + 1,
+                      lineItem.id,
+                      lineItem.quantity - 1
+                    );
+                  }}
+                >
+                  -
+                </button>{" "}
+                <button
+                  onClick={() => {
+                    removeFromCart(
+                      lineItem.id,
+                      product.id,
+                      lineItem.quantity + product.inventory,
+                      0
+                    );
+                  }}
+                >
                   Remove From Cart
                 </button>
               </li>
             );
           })}
       </ul>
+      <SaveForLater
+        saveForLaterItems={saveForLaterItems}
+        setSaveForLaterItems={setSaveForLaterItems}
+        headers={headers}
+      />
     </div>
   );
 };

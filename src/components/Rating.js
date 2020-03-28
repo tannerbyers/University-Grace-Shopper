@@ -2,18 +2,15 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import StarRatingComponent from "react-star-rating-component";
 
-const Rating = ({ products }) => {
-  let [rating, setRating] = useState();
-
+const Rating = ({ active, rating, setRating }) => {
   return (
-    <div className="rating-form">
-      <StarRatingComponent
-        name={Math.random()}
-        starCount={5}
-        value={rating}
-        onStarClick={setRating}
-      />
-    </div>
+    <StarRatingComponent
+      name={String(Math.random())}
+      starCount={5}
+      value={rating}
+      onStarClick={setRating}
+      editing={active}
+    />
   );
 };
 

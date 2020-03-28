@@ -2,7 +2,7 @@ const client = require("./client");
 
 const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems } = require("./models"));
+const models = ({ products, users, orders, lineItems, saveforlateritems } = require("./models"));
 
 const {
   getCart,
@@ -10,21 +10,30 @@ const {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  updateProductInventory,
+  updateLineItemInventory
 } = require("./userMethods");
 
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    DROP TABLE IF EXISTS addresses;
+    DROP TABLE IF EXISTS saveforlateritems;
+    DROP TABLE IF EXISTS ratings;
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
+    
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       username VARCHAR(100) NOT NULL UNIQUE,
+      firstname VARCHAR(100),
+      lastname VARCHAR(100),
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
+      "isLocked" BOOL DEFAULT FALSE,
       CHECK (char_length(username) > 0)
     );
 
@@ -32,6 +41,7 @@ const sync = async () => {
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       name VARCHAR(100) NOT NULL UNIQUE,
       price DECIMAL NOT NULL,
+      inventory INTEGER NOT NULL,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -40,11 +50,29 @@ const sync = async () => {
       status VARCHAR(10) DEFAULT 'CART',
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE addresses(
+      address VARCHAR(256) NOT NULL,
+      userId UUID REFERENCES users(id) NOT NULL,
+      orderId UUID REFERENCES orders(id) NOT NULL
+    );
+
     CREATE TABLE "lineItems"(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       "orderId" UUID REFERENCES orders(id) NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
+    );
+    CREATE TABLE saveforlateritems(
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      name VARCHAR(100) NOT NULL UNIQUE,
+      price DECIMAL NOT NULL,
+      "userId" UUID REFERENCES users(id) NOT NULL
+    );
+    CREATE TABLE ratings(
+      rating INTEGER DEFAULT NULL,
+      userId UUID REFERENCES users(id) NOT NULL,
+      productId UUID references products(id) NOT NULL
     );
   `;
   await client.query(SQL);
@@ -52,42 +80,54 @@ const sync = async () => {
   const _users = {
     lucy: {
       username: "lucy",
+      firstname: "Lucy",
+      lastname: "McLucyson",
       password: "LUCY",
-      role: "ADMIN"
+      role: "ADMIN",
+      isLocked: false
     },
     moe: {
       username: "moe",
+      firstname: "Moe",
+      lastname: "McMoeson",
       password: "MOE",
-      role: null
+      role: "USER",
+      isLocked: true
     },
     curly: {
       username: "larry",
       password: "LARRY",
-      role: null
+      role: "USER",
+      isLocked: false
     }
   };
 
   const _products = {
     foo: {
       name: "foo",
-      price: 2
+      price: 2,
+      inventory: 10
     },
     bar: {
       name: "bar",
-      price: 2
+      price: 2,
+      inventory: 5
     },
     bazz: {
       name: "bazz",
-      price: 2.5
+      price: 2.5,
+      inventory: 8
     },
     quq: {
       name: "quq",
-      price: 11.99
+      price: 11.99,
+      inventory: 9
     }
   };
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
   );
+
   const [foo, bar, bazz] = await Promise.all(
     Object.values(_products).map(product => products.create(product))
   );
@@ -126,5 +166,8 @@ module.exports = {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  updateProductInventory,
+  updateLineItemInventory,
+  saveforlateritems
 };

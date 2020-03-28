@@ -20,7 +20,7 @@ const isLoggedIn = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "ADMIN") {
-    return next(Error("not authorized"));
+    return next(Error("not authorized: Must be Admin"));
   }
   next();
 };
@@ -68,12 +68,25 @@ app.put("/api/auth/:id", (req, res, next) => {
     .catch(next);
 });
 
+app.put("/api/updateName/:id", (req, res, next) => {
+  models.users
+    .updateFirstLast(req.body)
+    .then(updatedUser => res.send(updatedUser))
+    .catch(next);
+});
+
+app.put("/api/lockUser/:id", (req, res, next) => {
+  models.users
+    .lockOrUnlockUser(req.body)
+    .then(lockededUser => res.send(lockededUser))
+    .catch(next);
+});
+
 // create new user
 app.post("/api/createUser", (req, res, next) => {
   models.users
     .create(req.body)
     .then(newUser => res.send(newUser))
-    .then(() => console.log("SERVER POST REQUEST INVOKED"))
     .catch(next);
 });
 
@@ -102,6 +115,10 @@ app.get("/api/getLineItems", (req, res, next) => {
 });
 
 app.post("/api/addToCart", (req, res, next) => {
+  db.models.products.update({
+    inventory: req.body.inventory,
+    productId: req.body.productId
+  });
   db.addToCart({ userId: req.user.id, productId: req.body.productId })
     .then(lineItem => res.send(lineItem))
     .catch(next);
@@ -113,10 +130,104 @@ app.delete("/api/removeFromCart/:id", (req, res, next) => {
     .catch(next);
 });
 
+app.post("/api/addresses", (req, res, next) => {
+  db.models.addresses
+    .create({
+      address: req.body.address,
+      userId: req.body.userId,
+      orderId: req.body.orderId
+    })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
+app.get("/api/addresses", (req, res, next) => {
+  db.models.addresses
+    .read({ userId: req.query.userId, orderId: req.query.orderId })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
+app.get("/api/Oaddresses", (req, res, next) => {
+  db.models.addresses
+    .readorder({ userId: req.query.userId, orderId: req.query.orderId })
+    .then(address => res.send(address))
+    .catch(next);
+});
+
 app.get("/api/products", (req, res, next) => {
   db.models.products
     .read()
     .then(products => res.send(products))
+    .catch(next);
+});
+
+app.put("/api/products", (req, res, next) => {
+  db.updateProductInventory(req.body).then(() => {
+    db.updateLineItemInventory(req.body).then(() => {
+      res.send(products);
+    });
+  });
+});
+
+app.get("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .read({
+      userId: req.query.userId,
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.get("/api/avgratings", (req, res, next) => {
+  db.models.ratings
+    .average({
+      productId: req.query.productId
+    })
+    .then(rating => res.send(rating))
+    .catch(next);
+});
+
+app.post("/api/ratings", (req, res, next) => {
+  db.models.ratings
+    .create({
+      rating: req.body.rating,
+      userId: req.body.userId,
+      productId: req.body.productId
+    })
+    .then(rating => res.send(rating));
+});
+
+app.post("/api/saveforlateritems", (req, res, next) => {
+  db.models.saveforlateritems
+    .create({
+      name: req.body.name,
+      price: req.body.price,
+      userId: req.user.id
+    })
+    .then(saveforlateitem => res.send(saveforlateitem))
+    .catch(next);
+});
+
+app.get("/api/saveforlateritems", (req, res, next) => {
+  db.models.saveforlateritems
+    .read()
+    .then(saveforlateritems => res.send(saveforlateritems))
+    .catch(next);
+});
+
+app.delete("/api/saveforlateritems/:id", (req, res, next) => {
+  db.models.saveforlateritems
+    .delete(req.params.id)
+    .then(saveforlateritems => res.send(saveforlateritems))
+    .catch(next);
+});
+
+app.get("/api/getUsers", (req, res, next) => {
+  db.models.users
+    .read()
+    .then(users => res.send(users))
     .catch(next);
 });
 
