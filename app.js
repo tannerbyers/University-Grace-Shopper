@@ -219,7 +219,7 @@ app.post("/api/saveforlateritems", (req, res, next) => {
 
 app.get("/api/saveforlateritems", (req, res, next) => {
   db.models.saveforlateritems
-    .read()
+    .read(req.user.id)
     .then(saveforlateritems => res.send(saveforlateritems))
     .catch(next);
 });
@@ -235,6 +235,28 @@ app.get("/api/getUsers", (req, res, next) => {
   db.models.users
     .read()
     .then(users => res.send(users))
+    .catch(next);
+});
+
+app.get("/api/promocodes", (req, res, next) => {
+  db.models.promocodes
+    .read()
+    .then(response => {
+      console.log("promocode response: ", response);
+      res.send(response);
+    })
+    .catch(next);
+});
+
+app.post("/api/promocodes", (req, res, next) => {
+  db.models.promocodes
+    .create({
+      promocode: req.body.promocode,
+      percentage: req.body.percentage,
+      activestatus: true,
+      userId: req.user.id
+    })
+    .then(promocodes => res.send(promocodes))
     .catch(next);
 });
 

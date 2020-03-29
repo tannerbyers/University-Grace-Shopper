@@ -32,10 +32,16 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [saveForLaterItems, setSaveForLaterItems] = useState([]);
+  const [promocodes, setPromocodes] = useState([]);
+
 
   useEffect(() => {
     axios.get("/api/saveforlateritems", headers()).then(response => {
       setSaveForLaterItems(response.data);
+
+      axios.get("/api/promocodes", headers()).then(response => {
+        setPromocodes(response.data);
+      });
     });
   }, []);
 
@@ -189,6 +195,10 @@ const App = () => {
 
   const { view } = params;
 
+  axios.get("/api/promocodes", headers()).then(response => {
+    console.log(response.data);
+  });
+
   return (
     <Router>
       {/*
@@ -297,7 +307,7 @@ const App = () => {
               />
             </Route>
             <Route path="/AdminTools">
-              <AdminTools headers={headers} users={users} setUsers={setUsers} />
+              <AdminTools setPromocodes={setPromocodes} promocodes={promocodes} headers={headers} users={users} setUsers={setUsers} />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}

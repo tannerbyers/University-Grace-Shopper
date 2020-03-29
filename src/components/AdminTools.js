@@ -1,7 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const AdminTools = ({ headers, users, setUsers }) => {
+const AdminTools = ({ headers, users, setUsers, promocodes, setPromocodes}) => {
+
+const [promocodeInput, setPromocodeInput] = useState("")
+const [promocodePercentage, setPromocodePercentage] = useState(0)
+
+
+console.log("promocodes: ", promocodes)
+
+  const AddNewPromocode = () => {
+    axios.post("/api/promocodes", {promocode: promocodeInput, percentage: promocodePercentage}, headers()).then(response => {
+      console.log(response.data);
+    })
+    setPromocodePercentage("")
+    setPromocodeInput("")
+
+    axios.get("/api/promocodes", headers()).then(response => {
+      setPromocodes(response.data);
+    });
+  }
+
   const toggleUserLock = userToLock => {
     const action = !userToLock.isLocked;
     axios
@@ -18,6 +37,12 @@ const AdminTools = ({ headers, users, setUsers }) => {
   return (
     <div>
       <h2>Administrator Tools</h2>
+      <div>
+        <h3> Add Promo Code </h3>
+        <label>Promo Code: <input onChange={(e) => setPromocodeInput(e.target.value)} type="text"/></label><br/>
+        <label>Percentage: <input onChange={(e) => setPromocodePercentage(e.target.value)} type="number"/></label><br/>
+        <button onClick={AddNewPromocode}> Add </button>
+      </div>
       <h4>Users:</h4>
       <ul>
         {users

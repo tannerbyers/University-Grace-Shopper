@@ -2,7 +2,7 @@ const client = require("./client");
 
 const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems, saveforlateritems } = require("./models"));
+const models = ({ products, users, orders, lineItems, saveforlateritems, promocodes } = require("./models"));
 
 const {
   getCart,
@@ -18,6 +18,7 @@ const {
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    DROP TABLE IF EXISTS promocodes;
     DROP TABLE IF EXISTS addresses;
     DROP TABLE IF EXISTS saveforlateritems;
     DROP TABLE IF EXISTS ratings;
@@ -25,6 +26,7 @@ const sync = async () => {
     DROP TABLE IF EXISTS orders;
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
+  
     
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -74,6 +76,15 @@ const sync = async () => {
       userId UUID REFERENCES users(id) NOT NULL,
       productId UUID references products(id) NOT NULL
     );
+
+    CREATE TABLE promocodes(
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      promocode VARCHAR(100) NOT NULL UNIQUE,
+      percentage DECIMAL NOT NULL,
+      "userId" UUID REFERENCES users(id) NOT NULL,
+      "activeStatus" BOOLEAN NOT NULL DEFAULT TRUE
+    );
+
   `;
   await client.query(SQL);
 

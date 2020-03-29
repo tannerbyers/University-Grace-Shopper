@@ -5,5 +5,6 @@ module.exports = {
   lineItems: require("./lineItems"),
   ratings: require("./ratings"),
   addresses: require("./addresses"),
-  saveforlateritems: require("./saveforlateritems")
+  saveforlateritems: require("./saveforlateritems"),
+  promocodes: require("./promocodes.js")
 };
