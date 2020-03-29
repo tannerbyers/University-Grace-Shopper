@@ -11,7 +11,20 @@ import Products from "./Products";
 import GuestProducts from "./GuestProducts";
 import GuestCart from "./GuestCart";
 import GuestOrders from "./GuestOrders";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+
+/****************************************************************************/
+/****************************************************************************/
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import HomeIcon from "@material-ui/icons/Home";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const headers = () => {
   const token = window.localStorage.getItem("token");
@@ -44,6 +57,50 @@ const App = () => {
       });
     });
   }, []);
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box p={3}>{children}</Box>}
+      </Typography>
+    );
+  }
+
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired
+  };
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`
+    };
+  }
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.paper
+    }
+  }));
+
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     axios.get("/api/products").then(response => setProducts(response.data));
@@ -206,8 +263,34 @@ const App = () => {
     */}
       {!auth.id ? (
         <div>
-          <nav className="header">
-            <div>
+          <AppBar>
+            <Tabs
+              className="nav-bar"
+              value={value}
+              onChange={handleChange}
+              aria-label="nav bar"
+            >
+              <Tab
+                label="home"
+                {...a11yProps(0)}
+                component={RouterLink}
+                to="/"
+              />
+              <Tab
+                label={<ShoppingCartIcon />}
+                {...a11yProps(1)}
+                component={RouterLink}
+                to="/GuestCart"
+              />
+              <Tab
+                label="Orders"
+                {...a11yProps(2)}
+                component={RouterLink}
+                to="/GuestOrders"
+              />
+            </Tabs>
+
+            {/*<div>
               <Link to="/">Home</Link>
             </div>
             <div>
@@ -220,8 +303,8 @@ const App = () => {
             </div>
             <div>
               <Link to="/Login">Login</Link>
-            </div>
-          </nav>
+            </div>*/}
+          </AppBar>
 
           <Switch>
             <Route path="/GuestCart">
@@ -287,9 +370,6 @@ const App = () => {
                 addToCart={addToCart}
                 updateProducts={updateProducts}
                 getLineItems={getLineItems}
-                headers={headers}
-                saveForLaterItems={saveForLaterItems}
-                setSaveForLaterItems={setSaveForLaterItems}
               />{" "}
             </Route>
             <Route path="/Orders">

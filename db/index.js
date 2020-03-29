@@ -2,7 +2,14 @@ const client = require("./client");
 
 const { authenticate, compare, findUserFromToken, hash } = require("./auth");
 
-const models = ({ products, users, orders, lineItems, saveforlateritems, promocodes } = require("./models"));
+const models = ({
+  products,
+  users,
+  orders,
+  lineItems,
+  saveforlateritems,
+  promocodes
+} = require("./models"));
 
 const {
   getCart,

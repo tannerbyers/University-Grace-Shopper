@@ -1,13 +1,52 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import faker from "faker";
+import { makeStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
+import Card from "@material-ui/core/Card";
+import {
+  CardHeader,
+  CardContent,
+  CardActions,
+  Collapse,
+  IconButton,
+  Typography
+} from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Rating from "../Rating";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    maxWidth: 345
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%" // 16:9
+  },
+  expand: {
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+  expandOpen: {
+    transform: "rotate(180deg)"
+  },
+  avatar: {
+    backgroundColor: red[500]
+  }
+}));
+
 const GuestProdItem = ({ product }) => {
+  const classes = useStyles();
   const [details, setDetails] = useState("hide");
   const [rating, setRating] = useState();
   const [inventory, setInventory] = useState(product.inventory);
   const [clickCount, setClickCount] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     axios
@@ -15,12 +54,8 @@ const GuestProdItem = ({ product }) => {
       .then(rating => setRating(Math.round(rating.data.avg)));
   }, []);
 
-  const toggleDetails = () => {
-    if (details == "") {
-      setDetails("hide");
-    } else {
-      setDetails("");
-    }
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   // this function increases the counts the amount of times a certain product has been clicked
@@ -62,25 +97,52 @@ const GuestProdItem = ({ product }) => {
   };
 
   return (
-    <div className="item">
-      <h1>{product.name}</h1>
+    <Card className={classes.root}>
+      <CardHeader
+        className="card-header"
+        title={product.name}
+        subheader={
+          product.inventory - clickCount > 0
+            ? `${product.inventory - clickCount} in stock`
+            : "out of stock"
+        }
+      />
       <img src="http://placeimg.com/140/80/animals" />
-      <h3>${Number(product.price).toFixed(2)}</h3>
-      <h4>Stock: {product.inventory - clickCount}</h4>
-      <h1>
-        <button className="details" onClick={toggleDetails}>
-          &#10576;
-        </button>
-      </h1>
-      <p className={details}>
-        This product is {faker.commerce.productAdjective()}.<br></br>
-        Average Rating
+
+      <CardContent>
         <Rating active={false} rating={rating} />
-      </p>
-      <button disabled={inventory < 1 ? true : false} onClick={addToCartGuest}>
-        Add to Cart
-      </button>
-    </div>
+        <Typography className="price" variant="body1">
+          ${Number(product.price).toFixed(2)}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton
+          aria-label="add to favorites"
+          disabled={inventory < 1 ? true : false}
+          onClick={addToCartGuest}
+        >
+          <AddShoppingCartIcon variant="contained" />
+        </IconButton>
+
+        <IconButton
+          className={clsx(classes.expand, {
+            [classes.expandOpen]: expanded
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>
+            This product is {faker.commerce.productAdjective()}.
+          </Typography>
+        </CardContent>
+      </Collapse>
+    </Card>
   );
 };
 

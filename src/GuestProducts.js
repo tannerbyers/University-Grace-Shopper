@@ -1,5 +1,6 @@
 import React from "react";
 import GuestProdItem from "./components/Products/GuestProdItem";
+import { Grid } from "@material-ui/core";
 
 const GuestProducts = ({ products }) => {
   let sortedProducts = products.sort((a, b) => {
@@ -16,13 +17,26 @@ const GuestProducts = ({ products }) => {
   });
 
   return (
-    <div>
-      <div className="parent">
+    <div className="products-page">
+      <Grid className="products-heading" container spacing={3}>
+        <h2>
+          <span>━━━━━━━</span>PRODUCTS<span>━━━━━━━</span>
+        </h2>
+      </Grid>
+      <Grid className="products-container" container spacing={3}>
         {sortedProducts &&
           sortedProducts.map(product => {
-            return <GuestProdItem key={product.id} product={product} />;
+            return (
+              <Grid item xs={3}>
+                <GuestProdItem
+                  className="product-card"
+                  key={product.id}
+                  product={product}
+                />
+              </Grid>
+            );
           })}
-      </div>
+      </Grid>
     </div>
   );
 };
