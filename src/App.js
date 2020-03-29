@@ -21,10 +21,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { IconButton, Button } from "@material-ui/core";
 
 const headers = () => {
   const token = window.localStorage.getItem("token");
@@ -46,7 +48,6 @@ const App = () => {
   const [lineItems, setLineItems] = useState([]);
   const [saveForLaterItems, setSaveForLaterItems] = useState([]);
   const [promocodes, setPromocodes] = useState([]);
-
 
   useEffect(() => {
     axios.get("/api/saveforlateritems", headers()).then(response => {
@@ -92,6 +93,11 @@ const App = () => {
     root: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper
+    },
+
+    loginLink: {
+      color: "gray",
+      border: "1px solid gray"
     }
   }));
 
@@ -263,32 +269,42 @@ const App = () => {
     */}
       {!auth.id ? (
         <div>
-          <AppBar>
-            <Tabs
-              className="nav-bar"
-              value={value}
-              onChange={handleChange}
-              aria-label="nav bar"
-            >
-              <Tab
-                label="home"
-                {...a11yProps(0)}
+          <AppBar className="app-bar">
+            <Toolbar className="tool-bar">
+              <Tabs
+                className="nav-bar"
+                value={value}
+                onChange={handleChange}
+                aria-label="nav bar"
+              >
+                <Tab
+                  label="home"
+                  {...a11yProps(0)}
+                  component={RouterLink}
+                  to="/"
+                />
+                <Tab
+                  label={<ShoppingCartIcon />}
+                  {...a11yProps(1)}
+                  component={RouterLink}
+                  to="/GuestCart"
+                />
+                <Tab
+                  label="Orders"
+                  {...a11yProps(2)}
+                  component={RouterLink}
+                  to="/GuestOrders"
+                />
+              </Tabs>
+              <Button
+                className={classes.loginLink}
+                variant="outlined"
                 component={RouterLink}
-                to="/"
-              />
-              <Tab
-                label={<ShoppingCartIcon />}
-                {...a11yProps(1)}
-                component={RouterLink}
-                to="/GuestCart"
-              />
-              <Tab
-                label="Orders"
-                {...a11yProps(2)}
-                component={RouterLink}
-                to="/GuestOrders"
-              />
-            </Tabs>
+                to="/Login"
+              >
+                Login
+              </Button>
+            </Toolbar>
 
             {/*<div>
               <Link to="/">Home</Link>
@@ -387,7 +403,13 @@ const App = () => {
               />
             </Route>
             <Route path="/AdminTools">
-              <AdminTools setPromocodes={setPromocodes} promocodes={promocodes} headers={headers} users={users} setUsers={setUsers} />
+              <AdminTools
+                setPromocodes={setPromocodes}
+                promocodes={promocodes}
+                headers={headers}
+                users={users}
+                setUsers={setUsers}
+              />
             </Route>
             <Route path="/">
               <Products addToCart={addToCart} products={products} />{" "}

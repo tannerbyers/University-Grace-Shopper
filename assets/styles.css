@@ -28,6 +28,13 @@ form > * {
   justify-content: center;
 }
 
+.tool-bar {
+  background-color: rgb(44, 44, 44);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .nav-bar {
   background-color: rgb(44, 44, 44);
 }
@@ -45,6 +52,10 @@ form > * {
 }
 .products-heading > h2 > span {
   margin: 3rem;
+}
+
+.guest-cart-container {
+  margin-top: 5rem;
 }
 
 .title-container {

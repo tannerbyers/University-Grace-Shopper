@@ -49,7 +49,7 @@ const GuestCart = ({ products }) => {
   };
 
   return (
-    <div>
+    <div className="guest-cart-container">
       <h2>Cart</h2>
       <button onClick={handleClick}>Create Order</button>
       <ul>
