@@ -344,34 +344,34 @@ const App = () => {
           */}
           <nav className="header">
             <div>
-              <Link to="/">Home</Link>
+              <RouterLink to="/">Home</RouterLink>
             </div>
             <div>
-              <Link to="/Cart">
+              <RouterLink to="/Cart">
                 <CartWidget lineItems={lineItems} />
-              </Link>
+              </RouterLink>
             </div>
             <div>
-              <Link to="/Orders">Orders</Link>
+              <RouterLink to="/Orders">Orders</RouterLink>
             </div>
             <div>
               {auth.role === "ADMIN" ? (
-                <Link to="/AdminTools">Admin Tools</Link>
+                <RouterLink to="/AdminTools">Admin Tools</RouterLink>
               ) : (
                 ""
               )}
             </div>
           </nav>
-          <Link to="/">
+          <RouterLink to="/">
             <button onClick={logout}>
               Logout{" "}
               {auth.firstname === null || auth.lastname === null
                 ? auth.username
                 : auth.firstname + " " + auth.lastname}
             </button>
-          </Link>
+          </RouterLink>
 
-          <Link to="/Profile">Profile</Link>
+          <RouterLink to="/Profile">Profile</RouterLink>
 
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}
