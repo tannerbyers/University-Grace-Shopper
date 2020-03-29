@@ -8,7 +8,23 @@ import Cart from "./Cart";
 import Profile from "./Profile";
 import AdminTools from "./components/AdminTools";
 import Products from "./Products";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import GuestProducts from "./GuestProducts";
+import GuestCart from "./GuestCart";
+import GuestOrders from "./GuestOrders";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+
+/****************************************************************************/
+/****************************************************************************/
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import HomeIcon from "@material-ui/icons/Home";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const headers = () => {
   const token = window.localStorage.getItem("token");
@@ -28,13 +44,53 @@ const App = () => {
   const [cart, setCart] = useState({});
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
-  const [saveForLaterItems, setSaveForLaterItems] = useState([]);
 
-  useEffect(() => {
-    axios.get("/api/saveforlateritems", headers()).then(response => {
-      setSaveForLaterItems(response.data);
-    });
-  }, []);
+  /********************************************************************************/
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box p={3}>{children}</Box>}
+      </Typography>
+    );
+  }
+
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired
+  };
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`
+    };
+  }
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.paper
+    }
+  }));
+
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  /****************************************************************************/
+  /****************************************************************************/
 
   useEffect(() => {
     axios.get("/api/products").then(response => setProducts(response.data));
@@ -186,12 +242,76 @@ const App = () => {
 
   const { view } = params;
 
-  if (!auth.id) {
-    return <Login login={login} createUser={createUser} />;
-  } else {
-    return (
-      <Router>
+  return (
+    <Router>
+      {/*
+      The page that loads when a user is NOT logged in
+    */}
+      {!auth.id ? (
         <div>
+          <AppBar>
+            <Tabs
+              className="nav-bar"
+              value={value}
+              onChange={handleChange}
+              aria-label="nav bar"
+            >
+              <Tab
+                label="home"
+                {...a11yProps(0)}
+                component={RouterLink}
+                to="/"
+              />
+              <Tab
+                label={<ShoppingCartIcon />}
+                {...a11yProps(1)}
+                component={RouterLink}
+                to="/GuestCart"
+              />
+              <Tab
+                label="Orders"
+                {...a11yProps(2)}
+                component={RouterLink}
+                to="/GuestOrders"
+              />
+            </Tabs>
+
+            {/*<div>
+              <Link to="/">Home</Link>
+            </div>
+            <div>
+              <Link to="/GuestCart">
+                <CartWidget lineItems={lineItems} />
+              </Link>
+            </div>
+            <div>
+              <Link to="/GuestOrders">Orders</Link>
+            </div>
+            <div>
+              <Link to="/Login">Login</Link>
+            </div>*/}
+          </AppBar>
+
+          <Switch>
+            <Route path="/GuestCart">
+              <GuestCart products={products} />
+            </Route>
+            <Route path="/GuestOrders">
+              <GuestOrders />
+            </Route>
+            <Route path="/Login">
+              <Login login={login} createUser={createUser} />
+            </Route>
+            <Route path="/">
+              <GuestProducts products={products} />
+            </Route>
+          </Switch>
+        </div>
+      ) : (
+        <div>
+          {/*
+          The page that loads when a user IS logged in
+          */}
           <nav className="header">
             <div>
               <Link to="/">Home</Link>
@@ -212,12 +332,15 @@ const App = () => {
               )}
             </div>
           </nav>
-          <button onClick={logout}>
-            Logout{" "}
-            {auth.firstname === null || auth.lastname === null
-              ? auth.username
-              : auth.firstname + " " + auth.lastname}
-          </button>
+          <Link to="/">
+            <button onClick={logout}>
+              Logout{" "}
+              {auth.firstname === null || auth.lastname === null
+                ? auth.username
+                : auth.firstname + " " + auth.lastname}
+            </button>
+          </Link>
+
           <Link to="/Profile">Profile</Link>
 
           {/* A <Switch> looks through its children <Route>s and
@@ -233,9 +356,6 @@ const App = () => {
                 addToCart={addToCart}
                 updateProducts={updateProducts}
                 getLineItems={getLineItems}
-                headers={headers}
-                saveForLaterItems={saveForLaterItems}
-                setSaveForLaterItems={setSaveForLaterItems}
               />{" "}
             </Route>
             <Route path="/Orders">
@@ -260,9 +380,9 @@ const App = () => {
             </Route>
           </Switch>
         </div>
-      </Router>
-    );
-  }
+      )}
+    </Router>
+  );
 };
 
 export default App;
