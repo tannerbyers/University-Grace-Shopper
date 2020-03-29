@@ -1,5 +1,8 @@
 body {
-  font-family: sans-serif;
+  font-family: Roboto;
+  text-shadow: 1px 1px 10px rgba(177, 177, 177, 0.397),
+    -1px -1px 10px rgba(177, 177, 177, 0.397);
+  color: rgb(48, 48, 48);
 }
 
 input,
@@ -16,6 +19,51 @@ form {
 
 form > * {
   margin: 1rem;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.nav-bar {
+  background-color: rgb(44, 44, 44);
+}
+
+.products-page {
+  margin-top: 5rem;
+}
+
+.products-heading {
+  justify-content: center;
+}
+
+.products-heading > h2 {
+  font-weight: 400;
+}
+.products-heading > h2 > span {
+  margin: 3rem;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.price {
+  padding: 10px 0;
+}
+
+.products-container {
+  text-align: center;
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
+
+.product-card {
+  text-align: center;
 }
 
 .horizontal {
@@ -101,50 +149,4 @@ li > * {
   cursor: pointer;
   outline: inherit;
   font-size: 38px;
-}
-
-/* Style the header with a grey background and some padding */
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 20px 10px;
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: DodgerBlue;
-}
-
-.header > div {
-  background-color: #f1f1f1;
-  margin: 10px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-
-/* Style the header links */
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
-}
-
-/* Change the background color on mouse-over */
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-/* Style the active/current link*/
-.header a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-.hide {
-  display: none;
 }
