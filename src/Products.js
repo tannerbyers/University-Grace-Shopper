@@ -1,65 +1,52 @@
 import React from "react";
 import faker from "faker";
+import { Grid } from "@material-ui/core";
 import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
-import ProductNav from "./components/Products/ProductNav";
+//import ProductNav from "./components/Products/ProductNav";
 
 const Products = ({ products, addToCart }) => {
-  let sortedProducts = products;
-
-  function compare(a, b) {
-    const productA = a.name.toUpperCase();
-    const productB = b.name.toUpperCase();
+  let sortedProducts = products.sort((a, b) => {
+    const prodA = a.name.toUpperCase();
+    const prodB = b.name.toUpperCase();
 
     let comparison = 0;
-    if (productA > productB) {
+    if (prodA > prodB) {
       comparison = 1;
-    } else if (productA < productB) {
+    } else if (prodA < prodB) {
       comparison = -1;
     }
     return comparison;
-  }
-  sortedProducts.sort(compare);
+  });
 
   return (
-    <div>
-      <ProductNav />
-      <div className="parent">
+    <div className="products-page">
+      <Grid className="products-heading" container spacing={1}>
+        <h2>
+          <span>━━━━━━━</span>PRODUCTS<span>━━━━━━━</span>
+        </h2>
+      </Grid>
+      <Grid
+        className="products-container"
+        container
+        spacing={10}
+        justify="center"
+      >
         {sortedProducts &&
           sortedProducts.map(product => {
             return (
-              <ProductItem
-                key={product.id}
-                addToCart={addToCart}
-                product={product}
-              />
+              <Grid item xs={6}>
+                <ProductItem
+                  key={product.id}
+                  addToCart={addToCart}
+                  product={product}
+                />
+              </Grid>
             );
           })}
-      </div>
+      </Grid>
     </div>
   );
 };
 
 export default Products;
-
-/*
-<ul>
-    {
-      products.map( product => {
-        return (
-         <li key={ product.id }>
-          <span>
-           { product.name }
-            </span>
-            <span>
-               ${
-                  Number(product.price).toFixed(2)
-                }
-            </span>
-          <button onClick={ ()=> addToCart(product.id)}>Add to Cart</button>
-           </li>
-          );
-        })
-      }
-</ul>
-*/
