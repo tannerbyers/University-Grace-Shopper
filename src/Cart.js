@@ -31,7 +31,7 @@ const Cart = ({
   for (let i = 0; i < lineItems.length; i++) {
     for (let j = 0; j < products.length; j++) {
       if (lineItems[i].productId === products[j].id) {
-        console.log("How many times should this be called")
+        console.log("How many times should this be called");
         Total += parseInt(products[j].price * lineItems[i].quantity);
       }
     }
@@ -145,24 +145,31 @@ const Cart = ({
                 </button>
                 <button
                   onClick={() => {
-                    updateInventory(
-                      lineItem.productId,
-                      product.inventory - 1,
-                      lineItem.id,
-                      lineItem.quantity + 1
-                    );
+                    if (
+                      lineItem.quantity + product.inventory !=
+                      lineItem.quantity
+                    ) {
+                      updateInventory(
+                        lineItem.productId,
+                        product.inventory - 1,
+                        lineItem.id,
+                        lineItem.quantity + 1
+                      );
+                    }
                   }}
                 >
                   +
                 </button>
                 <button
                   onClick={() => {
-                    updateInventory(
-                      lineItem.productId,
-                      product.inventory + 1,
-                      lineItem.id,
-                      lineItem.quantity - 1
-                    );
+                    if (lineItem.quantity != 0) {
+                      updateInventory(
+                        lineItem.productId,
+                        product.inventory + 1,
+                        lineItem.id,
+                        lineItem.quantity - 1
+                      );
+                    }
                   }}
                 >
                   -
