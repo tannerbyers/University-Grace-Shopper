@@ -27,12 +27,18 @@ const Cart = ({
   let Total = 0;
   console.log("lineItems", lineItems);
   console.log("products", products);
+  console.log("currentLine Items", currentLineItems)
 
-  for (let i = 0; i < lineItems.length; i++) {
+  let currentLineItems = lineItems.filter(
+    lineItem => lineItem.orderId === cart.id
+  );
+  
+  for (let i = 0; i < currentLineItems.length; i++) {
     for (let j = 0; j < products.length; j++) {
-      if (lineItems[i].productId === products[j].id) {
+
+      if (currentLineItems[i].productId === products[j].id) {
         console.log("How many times should this be called");
-        Total += parseInt(products[j].price * lineItems[i].quantity);
+        Total += parseInt(products[j].price * currentLineItems[i].quantity);
       }
     }
   }

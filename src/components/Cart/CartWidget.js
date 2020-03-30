@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
-const CartWidget = ({ lineItems }) => {
+const CartWidget = ({ lineItems, cart }) => {
   const useStyles = makeStyles(theme => ({
     badge: {
       "& > *": {
@@ -14,9 +14,12 @@ const CartWidget = ({ lineItems }) => {
 
   const classes = useStyles();
 
+  let currentLineItems = lineItems.filter(
+    lineItem => lineItem.orderId === cart.id
+  );
   let totalItemsInCart = 0;
-  for (let i = 0; i < lineItems.length; i++) {
-    totalItemsInCart += lineItems[i].quantity;
+  for (let i = 0; i < currentLineItems.length; i++) {
+    totalItemsInCart += currentLineItems[i].quantity;
   }
 
   return (

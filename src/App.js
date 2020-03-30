@@ -361,7 +361,7 @@ const App = () => {
                   to="/"
                 />
                 <Tab
-                  label={<CartWidget lineItems={lineItems} />}
+                  label={<CartWidget cart={cart} lineItems={lineItems} />}
                   {...a11yProps(1)}
                   component={RouterLink}
                   to="/Cart"
