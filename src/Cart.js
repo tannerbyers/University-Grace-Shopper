@@ -27,7 +27,6 @@ const Cart = ({
   let Total = 0;
   console.log("lineItems", lineItems);
   console.log("products", products);
-  console.log("currentLine Items", currentLineItems)
 
   let currentLineItems = lineItems.filter(
     lineItem => lineItem.orderId === cart.id
