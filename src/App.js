@@ -420,6 +420,9 @@ const App = () => {
                 addToCart={addToCart}
                 updateProducts={updateProducts}
                 getLineItems={getLineItems}
+                headers={headers}
+                saveForLaterItems={saveForLaterItems}
+                setSaveForLaterItems={setSaveForLaterItems}
               />{" "}
             </Route>
             <Route path="/Orders">
