@@ -19,8 +19,8 @@ import Rating from "../Rating";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: 500,
-    maxWidth: 650
+    minWidth: 300,
+    maxWidth: 350
   },
   media: {
     // height: 0,
@@ -68,7 +68,7 @@ const ProductItem = ({ product, addToCart }) => {
             : "out of stock"
         }
       />
-      <img src={`../public/${product.name}.png`} />
+      <img style={{width: "100%"}}src={`../public/${product.name}.png`} />
 
       <CardContent>
         <Rating active={false} rating={rating} />
