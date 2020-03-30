@@ -42,7 +42,6 @@ const useStyles = makeStyles(theme => ({
 
 const ProductItem = ({ product, addToCart }) => {
   const classes = useStyles();
-  const [details, setDetails] = useState("hide");
   const [rating, setRating] = useState();
   const [enable, setEnable] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -53,19 +52,15 @@ const ProductItem = ({ product, addToCart }) => {
       .then(rating => setRating(Math.round(rating.data.avg)));
   }, []);
 
-  const handleClick = e => {
-    if (details == "") {
-      setDetails("hide");
+  const handleButton = async e => {
+    setEnable(true);
+    if (product.inventory > 0) {
+      await addToCart(product.id, product.inventory - 1);
+      setTimeout(() => setEnable(false), 500);
     } else {
-      setDetails("");
+      setEnable(true);
     }
   };
-
-  // const handleButton = async e => {
-  //   setEnable(true);
-  //   await addToCart(product.id, product.inventory - 1);
-  //   setTimeout(() => setEnable(false), 500);
-  // };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -99,8 +94,8 @@ const ProductItem = ({ product, addToCart }) => {
       <CardActions disableSpacing>
         <IconButton
           aria-label="add to favorites"
-          disabled={product.inventory < 1 ? true : false}
-          onClick={() => addToCart(product.id, product.inventory - 1)}
+          disabled={enable}
+          onClick={handleButton}
         >
           <AddShoppingCartIcon variant="contained" />
         </IconButton>
