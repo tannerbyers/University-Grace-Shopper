@@ -46,7 +46,7 @@ const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
   const [rating, setRating] = useState();
   const [enable, setEnable] = useState(false);
-
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     axios
@@ -62,11 +62,14 @@ const ProductItem = ({ product, addToCart }) => {
     }
   };
 
-  const handleButton = async e => {
-    setEnable(true);
-    await addToCart(product.id, product.inventory - 1);
-    setTimeout(() => setEnable(false), 500);
+  // const handleButton = async e => {
+  //   setEnable(true);
+  //   await addToCart(product.id, product.inventory - 1);
+  //   setTimeout(() => setEnable(false), 500);
+  // };
 
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   return (
@@ -80,15 +83,16 @@ const ProductItem = ({ product, addToCart }) => {
             : "out of stock"
         }
       />
-      <img style={{width: "100%"}}src={`../public/${product.name}.png`} />
+      <img style={{ width: "100%" }} src={`../public/${product.name}.png`} />
 
       <CardContent>
         <Rating active={false} rating={rating} />
-      </p>
-      <button disabled={enable} className="addToCart" onClick={handleButton}>
-        Add to Cart
-      </button>
-    </div>
+        {
+          // <button disabled={enable} className="addToCart" onClick={handleButton}>
+          //   Add to Cart
+          // </button>
+        }
+
         <Typography className="price" variant="body1">
           ${Number(product.price).toFixed(2)}
         </Typography>
