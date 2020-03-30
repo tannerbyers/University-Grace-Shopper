@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
+import { Box, Button, Snackbar, TextField } from "@material-ui/core";
+// import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -68,52 +68,61 @@ const Login = ({ login, createUser }) => {
   };
 
   return (
-    <div>
+    <Box marginTop="6rem" padding="1rem">
       {!wantsToMakeAccount ? (
         <form onSubmit={onSubmit}>
           <h1>Login</h1>
           <div className="error">{error}</div>
-          <input
+          <TextField
+            label="username"
             value={username}
             onChange={ev => setUsername(ev.target.value)}
           />
-          <input
+          <TextField
+            label="password"
             type="password"
             value={password}
             onChange={ev => setPassword(ev.target.value)}
           />
-          <button>Login</button>
+          <br />
+
+          <Button type="submit" variant="contained">
+            Login
+          </Button>
         </form>
       ) : (
         <form onSubmit={onSubmit}>
           <h1>Create an account</h1>
           <div className="error">{error}</div>
-          <input
-            placeholder="choose a username"
+          <TextField
+            label="Choose a username"
             value={username}
             onChange={ev => setUsername(ev.target.value)}
           />
-          <input
-            placeholder="First name"
+          <TextField
+            label="First name"
             value={firstname}
             onChange={ev => setFirstname(ev.target.value)}
           />
-          <input
-            placeholder="Last name"
+          <TextField
+            label="Last name"
             value={lastname}
             onChange={ev => setLastname(ev.target.value)}
           />
-          <input
-            placeholder="choose a password"
+          <TextField
+            label="Choose a password"
             type="password"
             value={password}
             onChange={ev => setPassword(ev.target.value)}
           />
-          <button>Sign up</button>
+          <br />
+          <Button type="submit" variant="contained">
+            Sign up
+          </Button>
         </form>
       )}
 
-      <button
+      <Button
         type="button"
         onClick={() => {
           if (wantsToMakeAccount === false) setWantsToMakeAccount(true);
@@ -123,8 +132,8 @@ const Login = ({ login, createUser }) => {
         {!wantsToMakeAccount
           ? "Don't have an account? Sign up"
           : "Already have an account? Sign in"}
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 
