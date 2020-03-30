@@ -5,9 +5,13 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import { IconButton, Button, MenuItem } from "@material-ui/core";
+import Snackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const GuestCart = ({ products }) => {
   const [lineItems, setLineItems] = useState([]);
+  const [open, setOpen] = useState(false);
   let lineItemsCopy = [];
 
   useEffect(() => {
@@ -49,16 +53,47 @@ const GuestCart = ({ products }) => {
     console.log(window.localStorage.getItem(`${lineItem.name}`));
   };
 
-  const handleClick = () => {
+  const loginPrompt = () => {
+    setOpen(true);
     console.log(lineItems);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
     <Box className="guest-cart-container">
       <h2>Cart</h2>
-      <Button variant="contained" onClick={handleClick}>
+      <Button variant="contained" onClick={loginPrompt}>
         Create Order
       </Button>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Must be logged in to check out"
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
       <Box>
         {lineItems.map(lineItem => {
           const product = products.find(product => product.id === lineItem.id);
