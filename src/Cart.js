@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./components/SaveForLater/SaveForLater";
 import SaveForLater from "./components/SaveForLater/SaveForLater";
 import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
+import { IconButton, Button, MenuItem } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import Box from "@material-ui/core/Box";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
 
 const Cart = ({
   lineItems,
@@ -26,8 +36,6 @@ const Cart = ({
   };
 
   let Total = 0;
-  console.log("lineItems", lineItems);
-  console.log("products", products);
 
   let currentLineItems = lineItems.filter(
     lineItem => lineItem.orderId === cart.id
@@ -96,30 +104,40 @@ const Cart = ({
   };
 
   return (
-    <div>
+    <Box marginTop="5rem">
       <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
-      <button
-        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={handleClick}
+      <Box
+        width="32rem"
+        height="3rem"
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
       >
-        Create Order
-      </button>
-      <input
-        onChange={handleInput}
-        type="text"
-        placeholder="Please provide an address"
-      ></input>
-      <select>
-        {savedAddresses &&
-          savedAddresses.map(address => {
-            return (
-              <option key={Math.random()} value={address.address}>
-                {address.address}
-              </option>
-            );
-          })}
-      </select>
-      <ul>
+        <TextField
+          id="standard-basic"
+          label="Address"
+          onChange={handleInput}
+        ></TextField>
+        <Select variant="outlined">
+          {savedAddresses &&
+            savedAddresses.map(address => {
+              return (
+                <MenuItem key={Math.random()} value={address.address}>
+                  {address.address}
+                </MenuItem>
+              );
+            })}
+        </Select>
+        <Button
+          variant="contained"
+          disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
+          onClick={handleClick}
+        >
+          Create Order
+        </Button>
+      </Box>
+
+      <Box>
         {lineItems
           .filter(lineItem => lineItem.orderId === cart.id)
           .map(lineItem => {
@@ -127,91 +145,110 @@ const Cart = ({
               product => product.id === lineItem.productId
             );
             return (
-              <li key={lineItem.id}>
-                {product && product.name}
-                <label>Quantity</label>
-                <p>
-                  {lineItem.quantity == 0
-                    ? removeFromCart(
-                        lineItem.id,
-                        product.id,
-                        lineItem.quantity + product.inventory,
-                        0
-                      )
-                    : lineItem.quantity}
-                </p>
-                <button
-                  onClick={() => {
-                    saveItemForLater(
-                      product.name,
-                      product.price,
-                      product.inventory
-                    );
-                    removeFromCart(
-                      lineItem.id,
-                      product.id,
-                      lineItem.quantity + product.inventory,
-                      0
-                    );
-                  }}
-                >
-                  Save for later
-                </button>
-                <button
-                  onClick={() => {
-                    if (
-                      lineItem.quantity + product.inventory !=
-                      lineItem.quantity
-                    ) {
-                      updateInventory(
-                        lineItem.productId,
-                        product.inventory - 1,
-                        lineItem.id,
-                        lineItem.quantity + 1
-                      );
-                    }
-                  }}
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => {
-                    if (lineItem.quantity != 0) {
-                      updateInventory(
-                        lineItem.productId,
-                        product.inventory + 1,
-                        lineItem.id,
-                        lineItem.quantity - 1
-                      );
-                    }
-                  }}
-                >
-                  -
-                </button>{" "}
-                <button
-                  onClick={() => {
-                    removeFromCart(
-                      lineItem.id,
-                      product.id,
-                      lineItem.quantity + product.inventory,
-                      0
-                    );
-                  }}
-                >
-                  Remove From Cart
-                </button>
-              </li>
+              <Box marginTop="2rem" marginBottom="2rem">
+                <Card>
+                  <Box
+                    key={lineItem.id}
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    paddingLeft="0.5rem"
+                    paddingRight="0.5rem"
+                  >
+                    <Box width="6rem">{product && product.name}</Box>
+                    <label>Quantity</label>
+                    <p>
+                      {lineItem.quantity == 0
+                        ? removeFromCart(
+                            lineItem.id,
+                            product.id,
+                            lineItem.quantity + product.inventory,
+                            0
+                          )
+                        : lineItem.quantity}
+                    </p>
+
+                    <div>
+                      <IconButton
+                        onClick={() => {
+                          if (
+                            lineItem.quantity + product.inventory !=
+                            lineItem.quantity
+                          ) {
+                            updateInventory(
+                              lineItem.productId,
+                              product.inventory - 1,
+                              lineItem.id,
+                              lineItem.quantity + 1
+                            );
+                          }
+                        }}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          if (lineItem.quantity != 0) {
+                            updateInventory(
+                              lineItem.productId,
+                              product.inventory + 1,
+                              lineItem.id,
+                              lineItem.quantity - 1
+                            );
+                          }
+                        }}
+                      >
+                        <RemoveIcon />
+                      </IconButton>
+                    </div>
+                    <Button
+                      variant="contained"
+                      startIcon={<FavoriteIcon />}
+                      onClick={() => {
+                        saveItemForLater(
+                          product.name,
+                          product.price,
+                          product.inventory
+                        );
+                        removeFromCart(
+                          lineItem.id,
+                          product.id,
+                          lineItem.quantity + product.inventory,
+                          0
+                        );
+                      }}
+                    >
+                      Save for later
+                    </Button>
+                    <Button
+                      variant="contained"
+                      startIcon={<RemoveShoppingCartIcon />}
+                      onClick={() => {
+                        removeFromCart(
+                          lineItem.id,
+                          product.id,
+                          lineItem.quantity + product.inventory,
+                          0
+                        );
+                      }}
+                    >
+                      Remove From Cart
+                    </Button>
+                  </Box>
+                </Card>
+              </Box>
             );
           })}
-      </ul>
-      <h3>Total: {Total}</h3>
+      </Box>
+      <h3>Subtotal: ${Total}</h3>
       <SaveForLater
         saveForLaterItems={saveForLaterItems}
         setSaveForLaterItems={setSaveForLaterItems}
         headers={headers}
         AddSaveItemForLaterToCart={AddSaveItemForLaterToCart}
       />
-    </div>
+    </Box>
   );
 };
 
