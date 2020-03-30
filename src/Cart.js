@@ -44,7 +44,6 @@ const Cart = ({
   for (let i = 0; i < currentLineItems.length; i++) {
     for (let j = 0; j < products.length; j++) {
       if (currentLineItems[i].productId === products[j].id) {
-        console.log("How many times should this be called");
         Total += parseInt(products[j].price * currentLineItems[i].quantity);
       }
     }
@@ -74,8 +73,28 @@ const Cart = ({
 
   let userId = cart.userId;
   let orderId = cart.id;
+  let lineItemsCopy = [];
 
   useEffect(() => {
+    products.forEach(product => {
+      if (window.localStorage.getItem(`${product.name}`)) {
+        lineItemsCopy.push(
+          JSON.parse(window.localStorage.getItem(`${product.name}`))
+        );
+      }
+    });
+
+    for (let i = 0; i < lineItemsCopy.length; i++){
+      console.log("TESTING", lineItemsCopy[i].name)
+      for (let j = 0; j < products.length; j++){
+        console.log("PRODUCT", products[j])
+        if (lineItemsCopy[i].name = products[j].name){
+         addToCart(products[i].id, products[i].inventory -  products[j].quantity );
+         localStorage.removeItem(lineItemsCopy[i].name);
+        }
+      }
+    }
+
     axios
       .get("/api/addresses", {
         params: { userId: userId, orderId: orderId }
