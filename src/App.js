@@ -13,6 +13,7 @@ import GuestCart from "./GuestCart";
 import GuestOrders from "./GuestOrders";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
+import red from "@material-ui/core/colors/red";
 
 /****************************************************************************/
 /****************************************************************************/
@@ -97,8 +98,12 @@ const App = () => {
     },
 
     loginLink: {
-      color: "dodgerblue",
-      border: "2px solid dodgerblue"
+      color: "rgb(226, 226, 226)"
+    },
+
+    adminTools: {
+      backgroundColor: "rgb(42, 42, 42)",
+      color: "rgb(226, 226, 226)"
     }
   }));
 
@@ -316,7 +321,6 @@ const App = () => {
               </Tabs>
               <Button
                 className={classes.loginLink}
-                variant="outlined"
                 component={RouterLink}
                 to="/Login"
               >
@@ -375,13 +379,17 @@ const App = () => {
               </Tabs>
 
               <div>
-                <Button onClick={logout}>
+                <Button onClick={logout} className={classes.loginLink}>
                   Logout{" "}
                   {auth.firstname === null || auth.lastname === null
                     ? auth.username
                     : auth.firstname + " " + auth.lastname}
                 </Button>
-                <Button color="primary" component={RouterLink} to="/Profile">
+                <Button
+                  className={classes.loginLink}
+                  component={RouterLink}
+                  to="/Profile"
+                >
                   {<AccountBoxRoundedIcon />}
                 </Button>
               </div>
@@ -389,6 +397,7 @@ const App = () => {
 
             {auth.role === "ADMIN" ? (
               <Button
+                className={classes.adminTools}
                 variant="contained"
                 color="primary"
                 component={RouterLink}
