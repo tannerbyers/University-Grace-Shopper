@@ -37,7 +37,7 @@ const ProductItem = ({ product, addToCart }) => {
   return (
     <div className="item">
       <h1>{product.name}</h1>
-      <img src="http://placeimg.com/140/80/animals"></img>
+      <img src={`../public/${product.name}.png`}></img>
       <h3>${product.price}</h3>
       <h4>Stock : {product.inventory}</h4>
       <h1>

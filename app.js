@@ -5,6 +5,7 @@ const db = require("./db");
 const models = db.models;
 
 app.use("/dist", express.static(path.join(__dirname, "dist")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.use(express.json());

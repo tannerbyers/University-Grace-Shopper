@@ -121,25 +121,55 @@ const sync = async () => {
   };
 
   const _products = {
-    foo: {
-      name: "foo",
-      price: 2,
+    pinTwin: {
+      name: "Pin Twin",
+      price: 780,
       inventory: 10
     },
-    bar: {
-      name: "bar",
-      price: 2,
+    theCicada: {
+      name: "The Cicada",
+      price: 678,
       inventory: 5
     },
-    bazz: {
-      name: "bazz",
-      price: 2.5,
+    blackMoon: {
+      name: "Blackmoon",
+      price: 646,
       inventory: 8
     },
-    quq: {
-      name: "quq",
-      price: 11.99,
+    surfAndDestory: {
+      name: "Surf and Destroy",
+      price: 700,
       inventory: 9
+    },
+    shortCut: {
+      name: "Shortcut",
+      price: 695,
+      inventory: 13
+    },
+    rainBow: {
+      name: "Rainbow",
+      price: 700,
+      inventory: 7
+    },
+    bushWacker: {
+      name: "Bushwacker",
+      price: 600,
+      inventory: 21
+    },
+    modTwin: {
+      name: "Modtwin",
+      price: 750,
+      inventory: 15
+    },
+    zen: {
+      name: "ZEN",
+      price: 650,
+      inventory: 4
+    },
+    classic: {
+      name: "Classic",
+      price: 657,
+      inventory: 20
     }
   };
   const [lucy, moe] = await Promise.all(
