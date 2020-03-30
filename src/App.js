@@ -24,9 +24,9 @@ import Tab from "@material-ui/core/Tab";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import HomeIcon from "@material-ui/icons/Home";
+import AccountBoxRoundedIcon from "@material-ui/icons/AccountBoxRounded";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import { IconButton, Button } from "@material-ui/core";
+import { IconButton, Button, Badge } from "@material-ui/core";
 
 const headers = () => {
   const token = window.localStorage.getItem("token");
@@ -44,6 +44,7 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [cart, setCart] = useState({});
+  const [guestCartCount, setGuestCartCount] = useState(0);
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [saveForLaterItems, setSaveForLaterItems] = useState([]);
@@ -96,8 +97,8 @@ const App = () => {
     },
 
     loginLink: {
-      color: "gray",
-      border: "1px solid gray"
+      color: "dodgerblue",
+      border: "2px solid dodgerblue"
     }
   }));
 
@@ -262,6 +263,19 @@ const App = () => {
     console.log(response.data);
   });
 
+  // returns the number of unique items saved in localStorage --> i.e number of lineItems for guest
+  function allStorage() {
+    var values = [],
+      keys = Object.keys(localStorage),
+      i = keys.length;
+
+    while (i--) {
+      values.push(localStorage.getItem(keys[i]));
+    }
+
+    return values.length / 2;
+  }
+
   return (
     <Router>
       {/*
@@ -269,7 +283,7 @@ const App = () => {
     */}
       {!auth.id ? (
         <div>
-          <AppBar className="app-bar">
+          <AppBar className="app-bar" boxShadow={3}>
             <Toolbar className="tool-bar">
               <Tabs
                 className="nav-bar"
@@ -284,7 +298,11 @@ const App = () => {
                   to="/"
                 />
                 <Tab
-                  label={<ShoppingCartIcon />}
+                  label={
+                    <Badge badgeContent={allStorage()} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  }
                   {...a11yProps(1)}
                   component={RouterLink}
                   to="/GuestCart"
@@ -305,21 +323,6 @@ const App = () => {
                 Login
               </Button>
             </Toolbar>
-
-            {/*<div>
-              <Link to="/">Home</Link>
-            </div>
-            <div>
-              <Link to="/GuestCart">
-                <CartWidget lineItems={lineItems} />
-              </Link>
-            </div>
-            <div>
-              <Link to="/GuestOrders">Orders</Link>
-            </div>
-            <div>
-              <Link to="/Login">Login</Link>
-            </div>*/}
           </AppBar>
 
           <Switch>
@@ -342,36 +345,67 @@ const App = () => {
           {/*
           The page that loads when a user IS logged in
           */}
-          <nav className="header">
-            <div>
-              <RouterLink to="/">Home</RouterLink>
-            </div>
-            <div>
-              <RouterLink to="/Cart">
-                <CartWidget lineItems={lineItems} />
-              </RouterLink>
-            </div>
-            <div>
-              <RouterLink to="/Orders">Orders</RouterLink>
-            </div>
-            <div>
-              {auth.role === "ADMIN" ? (
-                <RouterLink to="/AdminTools">Admin Tools</RouterLink>
-              ) : (
-                ""
-              )}
-            </div>
-          </nav>
-          <RouterLink to="/">
-            <button onClick={logout}>
-              Logout{" "}
-              {auth.firstname === null || auth.lastname === null
-                ? auth.username
-                : auth.firstname + " " + auth.lastname}
-            </button>
-          </RouterLink>
 
-          <RouterLink to="/Profile">Profile</RouterLink>
+          <AppBar>
+            <Toolbar className="tool-bar">
+              <Tabs
+                className="nav-bar"
+                value={value}
+                onChange={handleChange}
+                aria-label="nav bar"
+              >
+                <Tab
+                  label="home"
+                  {...a11yProps(0)}
+                  component={RouterLink}
+                  to="/"
+                />
+                <Tab
+                  label={<CartWidget lineItems={lineItems} />}
+                  {...a11yProps(1)}
+                  component={RouterLink}
+                  to="/Cart"
+                />
+                <Tab
+                  label="Orders"
+                  {...a11yProps(2)}
+                  component={RouterLink}
+                  to="/Orders"
+                />
+              </Tabs>
+
+              <div>
+                <Button onClick={logout}>
+                  Logout{" "}
+                  {auth.firstname === null || auth.lastname === null
+                    ? auth.username
+                    : auth.firstname + " " + auth.lastname}
+                </Button>
+                <Button color="primary" component={RouterLink} to="/Profile">
+                  {<AccountBoxRoundedIcon />}
+                </Button>
+              </div>
+            </Toolbar>
+
+            {auth.role === "ADMIN" ? (
+              <Button
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/AdminTools"
+              >
+                Administator Tools
+              </Button>
+            ) : (
+              ""
+            )}
+            {/*<RouterLink to="/Cart">
+                <CartWidget lineItems={lineItems} />
+          </RouterLink>*/}
+          </AppBar>
+          <RouterLink to="/Profile">
+            <Button>Profile</Button>
+          </RouterLink>
 
           {/* A <Switch> looks through its children <Route>s and
       renders the first one that matches the current URL. */}

@@ -89,8 +89,7 @@ const GuestProdItem = ({ product }) => {
           })
         )
       )
-      .then(() => window.localStorage.getItem(`${product.name}`))
-      .then(lineItem => console.log(JSON.parse(lineItem)));
+      .then(() => window.localStorage.getItem(`${product.name}`));
   };
 
   return (
