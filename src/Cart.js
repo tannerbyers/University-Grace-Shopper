@@ -74,18 +74,23 @@ const Cart = ({
       .get("/api/addresses", {
         params: { userId: userId, orderId: orderId }
       })
-      .then(addresses => setSaved([addresses.data]));
+      .then(addresses => setSaved(addresses.data));
   }, []);
 
   const handleClick = e => {
     if (address !== "") {
       axios
         .post("/api/addresses", { address, userId, orderId })
-        .then(add => console.log(add));
+        .then(add => console.log("chicken", add));
       createOrder();
     } else {
       alert("Please provide an address");
     }
+  };
+
+  const handleSelect = e => {
+    console.log(e.target.value);
+    setAddress(e.target.value);
   };
 
   console.log(savedAddresses);
@@ -118,7 +123,10 @@ const Cart = ({
           label="Address"
           onChange={handleInput}
         ></TextField>
-        <Select variant="outlined">
+        <Select onChange={handleSelect} variant="outlined">
+          <MenuItem selected value="">
+            New Address
+          </MenuItem>
           {savedAddresses &&
             savedAddresses.map(address => {
               return (

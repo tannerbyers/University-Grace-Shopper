@@ -144,7 +144,7 @@ app.post("/api/addresses", (req, res, next) => {
 
 app.get("/api/addresses", (req, res, next) => {
   db.models.addresses
-    .read({ userId: req.query.userId, orderId: req.query.orderId })
+    .read({ userId: req.query.userId })
     .then(address => res.send(address))
     .catch(next);
 });
