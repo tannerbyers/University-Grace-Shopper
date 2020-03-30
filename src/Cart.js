@@ -88,7 +88,7 @@ const Cart = ({
       console.log("TESTING", lineItemsCopy[i].name)
       for (let j = 0; j < products.length; j++){
         console.log("PRODUCT", products[j])
-        if (lineItemsCopy[i].name = products[j].name){
+        if (lineItemsCopy[i].name == products[j].name){
          addToCart(products[i].id, products[i].inventory -  products[j].quantity );
          localStorage.removeItem(lineItemsCopy[i].name);
         }
