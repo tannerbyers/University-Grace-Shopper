@@ -45,6 +45,7 @@ const ProductItem = ({ product, addToCart }) => {
   const [rating, setRating] = useState();
   const [enable, setEnable] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [size, setSize] = useState("350");
 
   useEffect(() => {
     axios
@@ -66,8 +67,16 @@ const ProductItem = ({ product, addToCart }) => {
     setExpanded(!expanded);
   };
 
+  const handleImage = () => {
+    if (size == "350") {
+      setSize("800");
+    } else {
+      setSize("350");
+    }
+  };
+
   return (
-    <Card className={classes.root}>
+    <Card style={{ width: size }} className={classes.root}>
       <CardHeader
         className="card-header"
         title={product.name}
@@ -77,7 +86,11 @@ const ProductItem = ({ product, addToCart }) => {
             : "out of stock"
         }
       />
-      <img style={{ width: "100%" }} src={`../public/${product.name}.png`} />
+      <img
+        style={{ width: "100%" }}
+        onClick={handleImage}
+        src={`../public/${product.name}.png`}
+      />
 
       <CardContent>
         <Rating active={false} rating={rating} />
