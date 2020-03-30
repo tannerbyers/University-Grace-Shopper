@@ -14,7 +14,6 @@ const CartWidget = ({ lineItems }) => {
 
   const classes = useStyles();
 
-const CartWidget = ({ lineItems }) => {
   let totalItemsInCart = 0;
   for (let i = 0; i < lineItems.length; i++) {
     totalItemsInCart += lineItems[i].quantity;
@@ -22,7 +21,7 @@ const CartWidget = ({ lineItems }) => {
 
   return (
     <div className={classes.badge}>
-      <Badge badgeContent={lineItems.length} color="error">
+      <Badge badgeContent={totalItemsInCart} color="error">
         <ShoppingCartIcon />
       </Badge>
     </div>
