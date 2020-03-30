@@ -20,11 +20,10 @@ import Rating from "../Rating";
 const useStyles = makeStyles(theme => ({
   root: {
     minWidth: 300,
-    width: 350
+    width: 350,
+    margin: "5"
   },
   media: {
-    // height: 0,
-    // paddingTop: "56.25%" // 16:9
     height: 0,
     paddingTop: "56.25%", // 16:9,
     marginTop: "30"
