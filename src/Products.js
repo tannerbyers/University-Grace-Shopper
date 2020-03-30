@@ -1,6 +1,6 @@
 import React from "react";
 import faker from "faker";
-import { Grid } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
 //import ProductNav from "./components/Products/ProductNav";
@@ -26,25 +26,28 @@ const Products = ({ products, addToCart }) => {
           <span>━━━━━━━</span>PRODUCTS<span>━━━━━━━</span>
         </h2>
       </Grid>
-      <Grid
+      <Box
+        display="flex"
+        flexDirection="row"
         className="products-container"
         container
+        justifyContent="center"
+        flexWrap="wrap"
         spacing={10}
-        justify="center"
       >
         {sortedProducts &&
           sortedProducts.map(product => {
             return (
-              <Grid item xs={6}>
+              <Box item xs={6}>
                 <ProductItem
                   key={product.id}
                   addToCart={addToCart}
                   product={product}
                 />
-              </Grid>
+              </Box>
             );
           })}
-      </Grid>
+      </Box>
     </div>
   );
 };
