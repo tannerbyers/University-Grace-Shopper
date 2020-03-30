@@ -66,6 +66,12 @@ const Cart = ({
     setAddress(e.target.value);
   };
 
+  let filteredAddress = savedAddresses.filter((address, pos, arr) => {
+    return arr.map(addy => addy["address"]).indexOf(address["address"]) === pos;
+  });
+
+  console.log("filter", filteredAddress);
+
   let userId = cart.userId;
   let orderId = cart.id;
 
@@ -128,7 +134,8 @@ const Cart = ({
             New Address
           </MenuItem>
           {savedAddresses &&
-            savedAddresses.map(address => {
+            filteredAddress.map(address => {
+              console.log();
               return (
                 <MenuItem key={Math.random()} value={address.address}>
                   {address.address}
