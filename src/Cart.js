@@ -24,6 +24,19 @@ const Cart = ({
       });
   };
 
+  let Total = 0;
+  console.log("lineItems", lineItems);
+  console.log("products", products);
+
+  for (let i = 0; i < lineItems.length; i++) {
+    for (let j = 0; j < products.length; j++) {
+      if (lineItems[i].productId === products[j].id) {
+        console.log("How many times should this be called")
+        Total += parseInt(products[j].price * lineItems[i].quantity);
+      }
+    }
+  }
+
   let [address, setAddress] = useState("");
   let [savedAddresses, setSaved] = useState([]);
 
@@ -62,7 +75,7 @@ const Cart = ({
       .post("/api/saveforlateritems", { name, price }, headers())
       .then(response => {
         axios.get("/api/saveforlateritems", headers()).then(response => {
-          console.log('current saveforlaterlit', response.data)
+          console.log("current saveforlaterlit", response.data);
           setSaveForLaterItems(response.data);
         });
       });
@@ -170,6 +183,7 @@ const Cart = ({
             );
           })}
       </ul>
+      <h3>Total: {Total}</h3>
       <SaveForLater
         saveForLaterItems={saveForLaterItems}
         setSaveForLaterItems={setSaveForLaterItems}
