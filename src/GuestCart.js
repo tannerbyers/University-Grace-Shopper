@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Box from "@material-ui/core/Box";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
+import { IconButton, Button, MenuItem } from "@material-ui/core";
 
 const GuestCart = ({ products }) => {
   const [lineItems, setLineItems] = useState([]);
@@ -48,39 +54,56 @@ const GuestCart = ({ products }) => {
   };
 
   return (
-    <div className="guest-cart-container">
+    <Box className="guest-cart-container">
       <h2>Cart</h2>
-      <button onClick={handleClick}>Create Order</button>
-      <ul>
+      <Button variant="contained" onClick={handleClick}>
+        Create Order
+      </Button>
+      <Box>
         {lineItems.map(lineItem => {
           const product = products.find(product => product.id === lineItem.id);
           return (
-            <li key={lineItem.productId}>
-              {lineItem.name}
+            <Box
+              key={lineItem.productId}
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              paddingLeft="0.5rem"
+              paddingRight="0.5rem"
+            >
+              <Box width="6rem">{lineItem.name}</Box>
               <label>Quantity</label>
               <p>
                 {lineItem.quantity == 0
                   ? removeFromCart(lineItem.name)
                   : lineItem.quantity}
               </p>
-              <button
-                onClick={() => updateInventory(lineItem, lineItem.quantity + 1)}
+              <IconButton
+                onClick={() => {
+                  if (lineItem.quantity != 0) {
+                    updateInventory(lineItem, lineItem.quantity + 1);
+                  }
+                }}
               >
-                +
-              </button>
-              <button
+                <AddIcon />
+              </IconButton>
+              <IconButton
                 onClick={() => updateInventory(lineItem, lineItem.quantity - 1)}
               >
-                -
-              </button>
-              <button onClick={() => removeFromCart(lineItem.name)}>
+                <RemoveIcon />
+              </IconButton>
+              <Button
+                variant="contained"
+                onClick={() => removeFromCart(lineItem.name)}
+              >
                 Remove From Cart
-              </button>
-            </li>
+              </Button>
+            </Box>
           );
         })}
-      </ul>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
