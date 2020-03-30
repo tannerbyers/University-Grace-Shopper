@@ -97,8 +97,8 @@ li {
   flex-direction: column;
 }
 
-div > ul > li {
-  border-bottom: solid 1px teal;
+div > ul > .orderItem {
+  border-bottom: solid 3px #8aaae5;
 }
 
 li > * {

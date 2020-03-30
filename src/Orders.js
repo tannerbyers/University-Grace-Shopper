@@ -13,7 +13,7 @@ const Orders = ({ lineItems, orders, products }) => {
           );
 
           return (
-            <li key={order.id}>
+            <li className="orderItem" key={order.id}>
               <div>OrderID: {order.id.slice(0, 4)}</div>
               <ul>
                 {_lineItems.map(lineItem => {
