@@ -13,7 +13,8 @@ const Cart = ({
   getLineItems,
   headers,
   saveForLaterItems,
-  setSaveForLaterItems
+  setSaveForLaterItems,
+  addToCart
 }) => {
   const updateInventory = (productId, inventory, lineItemId, quantity) => {
     axios
@@ -31,16 +32,24 @@ const Cart = ({
   let currentLineItems = lineItems.filter(
     lineItem => lineItem.orderId === cart.id
   );
-  
+
   for (let i = 0; i < currentLineItems.length; i++) {
     for (let j = 0; j < products.length; j++) {
-
       if (currentLineItems[i].productId === products[j].id) {
         console.log("How many times should this be called");
         Total += parseInt(products[j].price * currentLineItems[i].quantity);
       }
     }
   }
+
+  const AddSaveItemForLaterToCart = saveForLaterItem => {
+    console.log(saveForLaterItem);
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].name == saveForLaterItem.name) {
+        addToCart(products[i].id, products[i].inventory - 1);
+      }
+    }
+  };
 
   let [address, setAddress] = useState("");
   let [savedAddresses, setSaved] = useState([]);
@@ -78,9 +87,9 @@ const Cart = ({
 
     axios
       .post("/api/saveforlateritems", { name, price }, headers())
-      .then(response => {
+      .then(res => {
         axios.get("/api/saveforlateritems", headers()).then(response => {
-          console.log("current saveforlaterlit", response.data);
+          console.log("current saveforlaterlist", response.data);
           setSaveForLaterItems(response.data);
         });
       });
@@ -200,6 +209,7 @@ const Cart = ({
         saveForLaterItems={saveForLaterItems}
         setSaveForLaterItems={setSaveForLaterItems}
         headers={headers}
+        AddSaveItemForLaterToCart={AddSaveItemForLaterToCart}
       />
     </div>
   );

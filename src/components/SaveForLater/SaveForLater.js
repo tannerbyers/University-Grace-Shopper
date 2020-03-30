@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 
-const SaveForLater = ({ headers, setSaveForLaterItems, saveForLaterItems }) => {
+const SaveForLater = ({ AddSaveItemForLaterToCart, setSaveForLaterItems, saveForLaterItems }) => {
   const removeSaveItemForLater = id => {
     axios.delete(`/api/saveforlateritems/${id}`).then(response => {
       setSaveForLaterItems(saveForLaterItems.filter(items => items.id !== id));
@@ -24,6 +24,11 @@ const SaveForLater = ({ headers, setSaveForLaterItems, saveForLaterItems }) => {
               >
                 {" "}
                 Remove{" "}
+              </button>
+              <button
+                onClick={() => {AddSaveItemForLaterToCart(saveForLaterItem); removeSaveItemForLater(saveForLaterItem.id)}}
+              >
+                Add to Cart
               </button>
             </div>
           );
