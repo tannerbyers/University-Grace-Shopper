@@ -2,8 +2,8 @@ const client = require("../client");
 
 const addresses = {
   read: async ({ userId }) => {
-    const SQL = "SELECT address from addresses WHERE userId = $1";
-    return (await client.query(SQL, [userId])).rows[0];
+    const SQL = "SELECT * FROM addresses WHERE userId = $1";
+    return (await client.query(SQL, [userId])).rows;
   },
   readorder: async ({ userId, orderId }) => {
     const SQL =

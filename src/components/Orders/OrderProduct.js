@@ -20,7 +20,7 @@ const OrderProduct = ({ product, lineItem, order }) => {
         console.log(rating);
       });
     axios
-      .get("/api/addresses", { params: { userId: userId, orderId: orderId } })
+      .get("/api/Oaddresses", { params: { userId: userId, orderId: orderId } })
       .then(address => setAddress(address.data.address));
   }, []);
 
