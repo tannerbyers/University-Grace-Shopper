@@ -28,14 +28,14 @@ form > * {
 }
 
 .tool-bar {
-  background-color: rgb(44, 44, 44);
+  background-color: #ff7f50;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 .nav-bar {
-  background-color: rgb(44, 44, 44);
+  background-color: #ff7f50;
 }
 
 .products-page {
@@ -83,7 +83,7 @@ form > * {
 .horizontal > * {
   flex: 1;
   margin: 1rem;
-  border: solid 1px dodgerBlue;
+  border: solid 1px rgb(43, 43, 43);
   padding: 1rem;
 }
 
