@@ -7,6 +7,7 @@ import Rating from "../Rating";
 const ProductItem = ({ product, addToCart }) => {
   const [details, setDetails] = useState("hide");
   const [rating, setRating] = useState();
+  const [enable, setEnable] = useState(false);
 
   useEffect(() => {
     axios
@@ -22,16 +23,10 @@ const ProductItem = ({ product, addToCart }) => {
     }
   };
 
-  const RenderButton = () => {
-    if (product.inventory && product.inventory > 0) {
-      return (
-        <button onClick={() => addToCart(product.id, product.inventory - 1)}>
-          Add to Cart
-        </button>
-      );
-    } else {
-      return <button disabled={true}>Add to Cart</button>;
-    }
+  const handleButton = async e => {
+    setEnable(true);
+    await addToCart(product.id, product.inventory - 1);
+    setTimeout(() => setEnable(false), 500);
   };
 
   return (
@@ -50,7 +45,9 @@ const ProductItem = ({ product, addToCart }) => {
         Average Rating
         <Rating active={false} rating={rating} />
       </p>
-      <RenderButton />
+      <button disabled={enable} className="addToCart" onClick={handleButton}>
+        Add to Cart
+      </button>
     </div>
   );
 };
