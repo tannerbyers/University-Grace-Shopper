@@ -1,6 +1,7 @@
 import React from "react";
 import GuestProdItem from "./components/Products/GuestProdItem";
-import { Grid } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
+import Footer from "./components/Footer";
 
 const GuestProducts = ({ products }) => {
   let sortedProducts = products.sort((a, b) => {
@@ -18,25 +19,35 @@ const GuestProducts = ({ products }) => {
 
   return (
     <div className="products-page">
-      <Grid className="products-heading" container spacing={3}>
+      <img
+        style={{ height: "100vh", width: "100%" }}
+        src={`../public/homepage.png`}
+      />
+      <Grid className="products-heading" container spacing={1}>
         <h2>
           <span>━━━━━━━</span>PRODUCTS<span>━━━━━━━</span>
         </h2>
       </Grid>
-      <Grid className="products-container" container spacing={3}>
+      <Box
+        className="products-container"
+        display="flex"
+        flexDirection="row"
+        className="products-container"
+        container
+        justifyContent="center"
+        flexWrap="wrap"
+        spacing={10}
+      >
         {sortedProducts &&
           sortedProducts.map(product => {
             return (
-              <Grid item xs={3}>
-                <GuestProdItem
-                  className="product-card"
-                  key={product.id}
-                  product={product}
-                />
-              </Grid>
+              <Box item xs={6}>
+                <GuestProdItem key={product.id} product={product} />
+              </Box>
             );
           })}
-      </Grid>
+      </Box>
+      <Footer />
     </div>
   );
 };

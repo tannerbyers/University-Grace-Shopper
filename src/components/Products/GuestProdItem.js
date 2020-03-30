@@ -19,11 +19,13 @@ import Rating from "../Rating";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 345
+    minWidth: 300,
+    width: 350
   },
   media: {
     height: 0,
-    paddingTop: "56.25%" // 16:9
+    paddingTop: "56.25%", // 16:9,
+    marginTop: "30"
   },
   expand: {
     transform: "rotate(0deg)",
@@ -103,7 +105,7 @@ const GuestProdItem = ({ product }) => {
             : "out of stock"
         }
       />
-      <img src="http://placeimg.com/140/80/animals" />
+      <img style={{ width: "100%" }} src={`../public/${product.name}.png`} />
 
       <CardContent>
         <Rating active={false} rating={rating} />
