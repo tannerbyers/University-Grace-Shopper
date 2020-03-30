@@ -3,6 +3,7 @@ import faker from "faker";
 import { Grid, Box } from "@material-ui/core";
 import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
+import Footer from "./components/Footer"
 //import ProductNav from "./components/Products/ProductNav";
 
 const Products = ({ products, addToCart }) => {
@@ -21,6 +22,7 @@ const Products = ({ products, addToCart }) => {
 
   return (
     <div className="products-page">
+            <img style={{height: "100vh", width: "100%"}}src={`../public/homepage.png`} />
       <Grid className="products-heading" container spacing={1}>
         <h2>
           <span>━━━━━━━</span>PRODUCTS<span>━━━━━━━</span>
@@ -48,6 +50,7 @@ const Products = ({ products, addToCart }) => {
             );
           })}
       </Box>
+      <Footer />
     </div>
   );
 };
