@@ -449,7 +449,11 @@ const App = () => {
               />
             </Route>
             <Route path="/">
-              <Products addToCart={addToCart} products={products} />{" "}
+              <Products
+                addToCart={addToCart}
+                products={products}
+                lineItems={lineItems}
+              />{" "}
             </Route>
           </Switch>
         </div>

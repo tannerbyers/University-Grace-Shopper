@@ -45,7 +45,8 @@ const ProductItem = ({ product, addToCart }) => {
   const classes = useStyles();
   const [details, setDetails] = useState("hide");
   const [rating, setRating] = useState();
-  const [expanded, setExpanded] = useState(false);
+  const [enable, setEnable] = useState(false);
+
 
   useEffect(() => {
     axios
@@ -53,8 +54,19 @@ const ProductItem = ({ product, addToCart }) => {
       .then(rating => setRating(Math.round(rating.data.avg)));
   }, []);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleClick = e => {
+    if (details == "") {
+      setDetails("hide");
+    } else {
+      setDetails("");
+    }
+  };
+
+  const handleButton = async e => {
+    setEnable(true);
+    await addToCart(product.id, product.inventory - 1);
+    setTimeout(() => setEnable(false), 500);
+
   };
 
   return (
@@ -72,6 +84,11 @@ const ProductItem = ({ product, addToCart }) => {
 
       <CardContent>
         <Rating active={false} rating={rating} />
+      </p>
+      <button disabled={enable} className="addToCart" onClick={handleButton}>
+        Add to Cart
+      </button>
+    </div>
         <Typography className="price" variant="body1">
           ${Number(product.price).toFixed(2)}
         </Typography>

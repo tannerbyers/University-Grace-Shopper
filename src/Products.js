@@ -5,10 +5,13 @@ import Rating from "./components/Rating";
 import ProductItem from "./components/Products/ProductItem";
 //import ProductNav from "./components/Products/ProductNav";
 
-const Products = ({ products, addToCart }) => {
-  let sortedProducts = products.sort((a, b) => {
-    const prodA = a.name.toUpperCase();
-    const prodB = b.name.toUpperCase();
+const Products = ({ products, addToCart, lineItems }) => {
+  let sortedProducts = products;
+
+  function compare(a, b) {
+    const productA = a.name.toUpperCase();
+    const productB = b.name.toUpperCase();
+
 
     let comparison = 0;
     if (prodA > prodB) {
@@ -40,9 +43,10 @@ const Products = ({ products, addToCart }) => {
             return (
               <Box item xs={6}>
                 <ProductItem
-                  key={product.id}
-                  addToCart={addToCart}
-                  product={product}
+                key={product.id}
+                addToCart={addToCart}
+                product={product}
+                lineItems={lineItems}
                 />
               </Box>
             );
